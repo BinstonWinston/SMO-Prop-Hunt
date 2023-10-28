@@ -76,14 +76,6 @@ static int pageIndex = 0;
 
 static const int maxPages = 3;
 
-void hidePlayer(PlayerActorBase* player) {
-    ((PlayerActorHakoniwa*)player)->mModelChanger->hideModel();
-}
-
-void showPlayer(PlayerActorBase* player) {
-    ((PlayerActorHakoniwa*)player)->mModelChanger->showModel();
-}
-
 void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead::DrawContext *drawContext) {
 
     // sead::FrameBuffer *frameBuffer;
@@ -99,25 +91,6 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
         al::executeDraw(curSequence->mLytKit, "２Ｄバック（メイン画面）");
         return;
     }
-
-    {
-        al::Scene *curScene = curSequence->curScene;
-        if(curScene && isInGame) {
-            PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
-            if (FlagActor::singleton != nullptr && playerBase != nullptr) {
-                auto const& p = al::getTrans(playerBase);
-                auto const& r = al::getQuat(playerBase);
-                if (al::isDead(FlagActor::singleton)) {
-                    FlagActor::singleton->makeActorAlive();
-                }
-                static_cast<FlagActor*>(FlagActor::singleton)->setXform(p, r);
-                hidePlayer(playerBase);
-            }
-        }
-    }
-
-    al::executeDraw(curSequence->mLytKit, "２Ｄバック（メイン画面）");
-    return;
 
     // int dispWidth = al::getLayoutDisplayWidth();
     int dispHeight = al::getLayoutDisplayHeight();
@@ -389,12 +362,7 @@ bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
     static bool isDisableMusic = false;
 
     if (al::isPadHoldZR(-1)) {
-        if (al::isPadTriggerUp(-1)) {
-            debugMode = !debugMode;
-            if (debugMode) {
-                showPlayer(playerBase);
-            }
-        }
+        if (al::isPadTriggerUp(-1)) debugMode = !debugMode;
         if (al::isPadTriggerLeft(-1)) pageIndex--;
         if (al::isPadTriggerRight(-1)) pageIndex++;
         if(pageIndex < 0) {

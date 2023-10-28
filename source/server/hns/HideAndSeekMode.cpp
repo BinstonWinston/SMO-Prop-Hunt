@@ -21,6 +21,7 @@
 
 #include "basis/seadNew.h"
 #include "server/hns/HideAndSeekConfigMenu.hpp"
+#include "actors/FlagActor.h"
 
 HideAndSeekMode::HideAndSeekMode(const char* name) : GameModeBase(name) {}
 
@@ -220,12 +221,59 @@ void HideAndSeekMode::update() {
         if(!mInfo->mIsPlayerIt) {
             mInvulnTime = 0;
             mModeLayout->showHiding();
+            enablePropMode(playerBase, isYukimaru);
         } else {
             mModeLayout->showSeeking();
+            disablePropMode(playerBase, isYukimaru);
         }
 
         Client::sendTagInfPacket();
     }
 
+    // Sync prop state with hiding/seeking state
+    if (mInfo->mIsPlayerIt && mInfo->mIsPropActive) {
+        disablePropMode(playerBase, isYukimaru);
+    }
+    else if (!mInfo->mIsPlayerIt && !mInfo->mIsPropActive) {
+        disablePropMode(playerBase, isYukimaru);
+    }
+
+    if (mInfo->mIsPropActive && !isYukimaru) {
+        updatePropPosition(reinterpret_cast<PlayerActorHakoniwa*>(playerBase));
+    }
+
     mInfo->mHidingTime = mModeTimer->getTime();
+}
+
+void HideAndSeekMode::enablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {
+    mInfo->mIsPropActive = true;
+    if (!isYukimaru) {
+        reinterpret_cast<PlayerActorHakoniwa*>(playerBase)->mModelChanger->hideModel();
+    }
+    if (FlagActor::singleton) { // Show prop
+        FlagActor::singleton->makeActorAlive();
+    }
+}
+
+void HideAndSeekMode::disablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {
+    mInfo->mIsPropActive = false;
+    if (!isYukimaru) {
+        reinterpret_cast<PlayerActorHakoniwa*>(playerBase)->mModelChanger->showModel();
+    }
+    if (FlagActor::singleton) { // Hide prop
+        FlagActor::singleton->makeActorDead();
+    }
+}
+
+void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
+    if (FlagActor::singleton == nullptr || player == nullptr) {
+        return;
+    }
+
+    auto const& p = al::getTrans(player);
+    auto const& r = al::getQuat(player);
+    if (al::isDead(FlagActor::singleton)) {
+        FlagActor::singleton->makeActorAlive();
+    }
+    FlagActor::singleton->setXform(p, r);
 }

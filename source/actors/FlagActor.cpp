@@ -15,7 +15,7 @@
 #include "random/seadRandom.h"
 #include "time/seadTickTime.h"
 
-al::LiveActor* FlagActor::singleton = nullptr;
+FlagActor* FlagActor::singleton = nullptr;
 
 FlagActor::FlagActor(const char* name) : al::LiveActor(name) {
     kill();
@@ -93,7 +93,7 @@ void FlagActor::syncPose() {
 }
 
 
-al::LiveActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName) {
+FlagActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName) {
     al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
     actorInitInfo.initViewIdSelf(&rootPlacementInfo, rootInitInfo);
 
@@ -115,7 +115,7 @@ al::LiveActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInf
     //     Logger::log("Debug Puppet Created!\n");
     // }
 
-    return newActor;
+    return reinterpret_cast<FlagActor*>(newActor);
 }
 
 void FlagActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {

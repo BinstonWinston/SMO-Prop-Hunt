@@ -34,8 +34,8 @@ struct FlagInfo {
 
 class FlagActor : public al::LiveActor {
     public:
-        static al::LiveActor* singleton;
-        static al::LiveActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
+        static FlagActor* singleton;
+        static FlagActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);
 
         FlagActor(const char* name);

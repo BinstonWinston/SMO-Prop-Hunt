@@ -14,6 +14,7 @@ struct HideAndSeekInfo : GameModeInfoBase {
     bool mIsUseGravity = false;
     bool mIsUseGravityCam = false;
     GameTime mHidingTime;
+    bool mIsPropActive = false;
 };
 
 class HideAndSeekMode : public GameModeBase {
@@ -42,5 +43,10 @@ class HideAndSeekMode : public GameModeBase {
         HideAndSeekIcon *mModeLayout = nullptr;
         HideAndSeekInfo* mInfo = nullptr;
         al::CameraTicket *mTicket = nullptr;
+
+        
+        void enablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
+        void disablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
+        void updatePropPosition(PlayerActorHakoniwa* player);
 
 };
