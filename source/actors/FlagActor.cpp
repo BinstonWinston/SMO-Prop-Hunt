@@ -12,6 +12,8 @@
 #include "math/seadQuat.h"
 #include "math/seadVector.h"
 #include "server/gamemode/GameModeBase.hpp"
+#include "random/seadRandom.h"
+#include "time/seadTickTime.h"
 
 al::LiveActor* FlagActor::singleton = nullptr;
 
@@ -91,7 +93,7 @@ void FlagActor::syncPose() {
 }
 
 
-al::LiveActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, bool isDebug) {
+al::LiveActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName) {
     al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
     actorInitInfo.initViewIdSelf(&rootPlacementInfo, rootInitInfo);
 
@@ -103,9 +105,9 @@ al::LiveActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInf
 
     FlagActor *newActor = (FlagActor*)createActor("FlagActor");
 
-    Logger::log("Creating Flag Actor.\n");
+    Logger::log("Creating Prop Actor: %s\n", propArchiveName);
 
-    newActor->initProp("PropHuntSandWorldHomeLift001");
+    newActor->initProp(propArchiveName);
     newActor->init(actorInitInfo);
     // newActor->makeActorAlive();
 
@@ -117,5 +119,14 @@ al::LiveActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInf
 }
 
 void FlagActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
-    FlagActor::singleton = FlagActor::createFromFactory(rootInfo, placement, false);
+    sead::Random random(static_cast<u32>(sead::TickTime().toTicks()));
+
+    const char* propArchiveNames[] = {
+        "PropHuntSandWorldHomeLift001",
+        "PropHuntCityWorldHomeFence003",
+    };
+
+    const auto propIndex = random.getU32(sizeof(propArchiveNames) / sizeof(propArchiveNames[0]));
+
+    FlagActor::singleton = FlagActor::createFromFactory(rootInfo, placement, propArchiveNames[propIndex]);
 }
