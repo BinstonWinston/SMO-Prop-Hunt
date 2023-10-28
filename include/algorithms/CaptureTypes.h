@@ -18,8 +18,8 @@ namespace CaptureTypes {
     static constexpr Type ToType(std::uint16_t value) {return static_cast<Type>(value);}
 
     static constexpr std::array<const char*, ToValue(Type::End)> s_Strs {
-        "PropHuntSandWorldHomeLift001",
-        "PropHuntCityWorldHomeFence003"
+        "SandWorldHomeLift001",
+        "CityWorldHomeFence003"
     };
 
     // these ifdefs are really dumb but it makes clangd happy so /shrug

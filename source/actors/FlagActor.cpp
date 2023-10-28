@@ -28,17 +28,31 @@ void FlagActor::initProp(const char* archiveName) {
 }
 
 void FlagActor::init(al::ActorInitInfo const &initInfo) {
-    al::initActorWithArchiveName(this, initInfo, /*"FireHydrant"*/mArchiveName, nullptr);
 
     auto* normalModel = this;
-    // mCostumeInfo = PlayerFunction::initMarioModelCommon(normalModel, initInfo, bodyName, capName, 0, false, nullptr, false, false);
+    al::initActorWithArchiveName(this, initInfo, /*"FireHydrant"*/mArchiveName, nullptr);
 
-    // normalModel->mActorActionKeeper->mPadAndCamCtrl->mRumbleCount = 0; // set rumble count to zero so that no rumble actions will run
+    al::initActorPoseTQSV(this);
 
-    // al::setClippingInfo(normalModel, 50000.0f, 0);
-    // al::setClippingNearDistance(normalModel, 50000.0f);
-    // al::hideSilhouetteModelIfShow(normalModel);
-    // al::validateClipping(normalModel);
+    al::hideSilhouetteModelIfShow(this);
+
+    if(al::isExistDitherAnimator(this)) {
+        // Logger::log("Disabling Dither Animator.\n");
+        al::invalidateDitherAnim(this);
+    }
+
+    if (al::isExistCollisionParts(this)) {
+        // Logger::log(("Disabling Collision.\n"));
+        al::invalidateCollisionParts(this);
+    }
+
+    al::invalidateHitSensors(this);
+
+    al::invalidateClipping(this);
+
+    al::offCollide(this);
+
+    makeActorDead();
 }
 
 void FlagActor::initAfterPlacement() { 
@@ -111,11 +125,6 @@ FlagActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, a
 
     newActor->initProp(propArchiveName);
     newActor->init(actorInitInfo);
-    // newActor->makeActorAlive();
-
-    // if (Client::tryAddDebugPuppet(newActor)) {
-    //     Logger::log("Debug Puppet Created!\n");
-    // }
 
     return reinterpret_cast<FlagActor*>(newActor);
 }

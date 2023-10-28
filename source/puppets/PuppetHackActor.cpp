@@ -14,6 +14,8 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
 
     al::initActorWithArchiveName(this, initInfo, mHackType, nullptr);
 
+    al::initActorPoseTQSV(this);
+
     al::hideSilhouetteModelIfShow(this);
 
     if(al::isExistDitherAnimator(this)) {

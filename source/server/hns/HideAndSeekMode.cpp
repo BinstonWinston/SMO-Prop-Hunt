@@ -235,7 +235,7 @@ void HideAndSeekMode::update() {
         disablePropMode(playerBase, isYukimaru);
     }
     else if (!mInfo->mIsPlayerIt && !mInfo->mIsPropActive) {
-        disablePropMode(playerBase, isYukimaru);
+        enablePropMode(playerBase, isYukimaru);
     }
 
     if (mInfo->mIsPropActive && !isYukimaru) {
@@ -276,4 +276,7 @@ void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
         FlagActor::singleton->makeActorAlive();
     }
     FlagActor::singleton->setXform(p, r);
+
+    // Set this every frame in case player goes in a capture or dies that would cause the player to re-appear
+    player->mModelChanger->hideModel();
 }
