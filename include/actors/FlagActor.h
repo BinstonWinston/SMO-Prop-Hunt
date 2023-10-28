@@ -26,6 +26,7 @@
 #include "helpers.hpp"
 #include "algorithms/CaptureTypes.h"
 
+
 struct FlagInfo {
     // Flag transform
     sead::Vector3f pos = sead::Vector3f(0.f,0.f,0.f);
@@ -34,10 +35,9 @@ struct FlagInfo {
 
 class FlagActor : public al::LiveActor {
     public:
-        static FlagActor* singleton;
+        static FlagActor* props[static_cast<u32>(CaptureTypes::Type::End)];
         static FlagActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);
-        static const char* getCurrentPropName();
 
         FlagActor(const char* name);
         virtual void init(al::ActorInitInfo const &) override;
@@ -48,6 +48,10 @@ class FlagActor : public al::LiveActor {
         virtual void makeActorDead(void) override;
 
         void initProp(const char* archiveName);
+
+        const char* getPropArchiveName() {
+            return mArchiveName;
+        }
 
         void setXform(sead::Vector3f const& pos, sead::Quatf const& rot) {
             m_info.pos = pos;

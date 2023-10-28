@@ -7,6 +7,7 @@
 #include "server/gamemode/GameModeConfigMenu.hpp"
 #include "server/gamemode/GameModeTimer.hpp"
 #include "server/hns/HideAndSeekConfigMenu.hpp"
+#include "actors/FlagActor.h"
 
 struct HideAndSeekInfo : GameModeInfoBase {
     HideAndSeekInfo() { mMode = GameMode::HIDEANDSEEK; }
@@ -14,11 +15,13 @@ struct HideAndSeekInfo : GameModeInfoBase {
     bool mIsUseGravity = false;
     bool mIsUseGravityCam = false;
     GameTime mHidingTime;
-    bool mIsPropActive = false;
+    CaptureTypes::Type mPropType = CaptureTypes::Type::Unknown;
 };
 
 class HideAndSeekMode : public GameModeBase {
     public:
+        static const char* getCurrentPropName();
+
         HideAndSeekMode(const char* name);
 
         void init(GameModeInitInfo const& info) override;
@@ -44,7 +47,8 @@ class HideAndSeekMode : public GameModeBase {
         HideAndSeekInfo* mInfo = nullptr;
         al::CameraTicket *mTicket = nullptr;
 
-        
+        FlagActor* getPropActor();
+        bool isPropActive() { return mInfo->mPropType != CaptureTypes::Type::Unknown; }
         void enablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
         void disablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
         void updatePropPosition(PlayerActorHakoniwa* player);

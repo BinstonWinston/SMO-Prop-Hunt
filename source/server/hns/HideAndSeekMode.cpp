@@ -231,52 +231,78 @@ void HideAndSeekMode::update() {
     }
 
     // Sync prop state with hiding/seeking state
-    if (mInfo->mIsPlayerIt && mInfo->mIsPropActive) {
+    if (mInfo->mIsPlayerIt && isPropActive()) {
         disablePropMode(playerBase, isYukimaru);
     }
-    else if (!mInfo->mIsPlayerIt && !mInfo->mIsPropActive) {
+    else if (!mInfo->mIsPlayerIt && !isPropActive()) {
         enablePropMode(playerBase, isYukimaru);
     }
 
-    if (mInfo->mIsPropActive && !isYukimaru) {
+    if (isPropActive() && !isYukimaru) {
         updatePropPosition(reinterpret_cast<PlayerActorHakoniwa*>(playerBase));
     }
 
     mInfo->mHidingTime = mModeTimer->getTime();
 }
 
+const char* HideAndSeekMode::getCurrentPropName() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return nullptr;
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+
+    auto propActor = hsMode->getPropActor();
+    if (!propActor) {
+        return nullptr;
+    }
+    return propActor->getPropArchiveName();
+}
+
+FlagActor* HideAndSeekMode::getPropActor() {
+    if (mInfo->mPropType == CaptureTypes::Type::Unknown) {
+        return nullptr;
+    }
+    return FlagActor::props[static_cast<u32>(mInfo->mPropType)];
+}
+
 void HideAndSeekMode::enablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {
-    mInfo->mIsPropActive = true;
+    sead::Random random(static_cast<u32>(sead::TickTime().toTicks()));
+
+    mInfo->mPropType = static_cast<CaptureTypes::Type>(random.getU32(static_cast<u32>(CaptureTypes::Type::End)));
     if (!isYukimaru) {
         reinterpret_cast<PlayerActorHakoniwa*>(playerBase)->mModelChanger->hideModel();
     }
-    if (FlagActor::singleton) { // Show prop
-        FlagActor::singleton->makeActorAlive();
-        al::showModel(FlagActor::singleton);
+    auto propActor = getPropActor();
+    if (propActor) { // Show prop
+        propActor->makeActorAlive();
+        al::showModel(propActor);
     }
 }
 
 void HideAndSeekMode::disablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {
-    mInfo->mIsPropActive = false;
+    auto propActor = getPropActor();
+    mInfo->mPropType = CaptureTypes::Type::Unknown;
     if (!isYukimaru) {
         reinterpret_cast<PlayerActorHakoniwa*>(playerBase)->mModelChanger->showModel();
     }
-    if (FlagActor::singleton) { // Hide prop
-        al::hideModel(FlagActor::singleton);
+    if (propActor) { // Hide prop
+        al::hideModel(propActor);
     }
 }
 
 void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
-    if (FlagActor::singleton == nullptr || player == nullptr) {
+    auto propActor = getPropActor();
+    if (propActor == nullptr || player == nullptr) {
         return;
     }
 
     auto const& p = al::getTrans(player);
     auto const& r = al::getQuat(player);
-    if (al::isDead(FlagActor::singleton)) {
-        FlagActor::singleton->makeActorAlive();
+    if (al::isDead(propActor)) {
+        propActor->makeActorAlive();
     }
-    FlagActor::singleton->setXform(p, r);
+    propActor->setXform(p, r);
 
     // Set this every frame in case player goes in a capture or dies that would cause the player to re-appear
     player->mModelChanger->hideModel();

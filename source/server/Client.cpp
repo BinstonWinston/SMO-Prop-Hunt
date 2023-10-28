@@ -445,7 +445,7 @@ void Client::sendPlayerInfPacket(const PlayerActorBase *playerBase, bool isYukim
             packet->animBlendWeights[i] = player->mPlayerAnimator->getBlendWeight(i);
         }
 
-        const char *hackName = FlagActor::getCurrentPropName();
+        const char *hackName = HideAndSeekMode::getCurrentPropName();
 
         if (hackName != nullptr) {
             sInstance->isClientCaptured = true;
@@ -670,7 +670,7 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
     if (sInstance->isClientCaptured && !sInstance->isSentCaptureInf) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
-        strcpy(packet->hackName, tryConvertName(FlagActor::getCurrentPropName()));
+        strcpy(packet->hackName, tryConvertName(HideAndSeekMode::getCurrentPropName()));
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = true;

@@ -14,10 +14,8 @@
 #include "server/gamemode/GameModeBase.hpp"
 #include "random/seadRandom.h"
 #include "time/seadTickTime.h"
-#include "server/hns/HideAndSeekMode.hpp"
-#include "algorithms/CaptureTypes.h"
 
-FlagActor* FlagActor::singleton = nullptr;
+FlagActor* FlagActor::props[static_cast<u32>(CaptureTypes::Type::End)] = {nullptr};
 
 FlagActor::FlagActor(const char* name) : al::LiveActor(name) {
     kill();
@@ -130,27 +128,8 @@ FlagActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, a
 }
 
 void FlagActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
-    sead::Random random(static_cast<u32>(sead::TickTime().toTicks()));
-
-    const auto propType = static_cast<CaptureTypes::Type>(random.getU32(static_cast<u32>(CaptureTypes::Type::End)));
-
-    FlagActor::singleton = FlagActor::createFromFactory(rootInfo, placement, CaptureTypes::FindStr(propType));
-}
-
-const char* FlagActor::getCurrentPropName() {
-    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
-        return nullptr;
+    for (int32_t i = 0; i < static_cast<int32_t>(CaptureTypes::Type::End); i++) {
+        const char* propArchiveName = CaptureTypes::FindStr(static_cast<CaptureTypes::Type>(i));
+        FlagActor::props[i] = FlagActor::createFromFactory(rootInfo, placement, propArchiveName);
     }
-
-    if (!FlagActor::singleton) {
-        return nullptr;
-    }
-
-    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
-    if (hsMode->isPlayerIt()) {
-        // Seekers have no props
-        return nullptr;
-    }
-
-    return FlagActor::singleton->mArchiveName;
 }
