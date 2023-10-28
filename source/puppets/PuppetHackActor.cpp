@@ -1,6 +1,10 @@
 #include "actors/PuppetHackActor.h"
 #include "al/util.hpp"
 #include "logger.hpp"
+#include "actors/PuppetActor.h"
+#include "algorithms/CaptureTypes.h"
+#include "server/Client.hpp"
+#include "al/factory/ActorFactory.h"
 
 PuppetHackActor::PuppetHackActor(const char *name) : al::LiveActor(name) {}
 
@@ -29,10 +33,6 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
     al::offCollide(this);
 
     makeActorDead();
-
-    startHackAnim(true); // this hack puppet will always be captured so its Hack visibility should be true
-
-    startAction("Wait");
 }
 
 void PuppetHackActor::initAfterPlacement() {
@@ -52,40 +52,81 @@ void PuppetHackActor::control() {
 
 }
 
-void PuppetHackActor::startAction(const char *actName) {
-    if(al::tryStartActionIfNotPlaying(this, actName)) {
-        const char *curActName = al::getActionName(this);
-        if(curActName) {
-            if(al::isSklAnimExist(this, curActName)) {
-                al::clearSklAnimInterpole(this);
+PuppetHackActor *createPuppetHackActorFromFactory(al::ActorInitInfo const &rootInitInfo, const al::PlacementInfo *rootPlacementInfo, PuppetInfo *curInfo, const char *hackType) {
+    al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
+    actorInitInfo.initViewIdSelf(rootPlacementInfo, rootInitInfo);
+
+    int serverMaxPlayers = Client::getMaxPlayerCount(); // TODO: Find a way around needing to do this, such as creating a single hack actor per puppet that can dynamically switch models
+
+    // only use this if player count is 8
+    if (serverMaxPlayers == 8) {
+        const char *stageName = "";
+        if (actorInitInfo.mPlacementInfo._0.tryGetStringByKey(&stageName, "PlacementFileName")) {
+            if (al::isEqualString(stageName, "ForestWorldHomeStage")) {
+                return nullptr;
+            }
+        }
+    }
+
+    if (serverMaxPlayers > 8) { // disable capture sync if dealing with more than 8 players
+        return nullptr;
+    }
+
+    al::createActor createActor = actorInitInfo.mActorFactory->getCreator("PuppetHackActor");
+    
+    if(createActor) {
+        PuppetHackActor *newActor = (PuppetHackActor*)createActor("PuppetHackActor");
+
+        newActor->initOnline(curInfo, hackType); // set puppet info first before calling init so we can get costume info from the info
+
+        newActor->init(actorInitInfo);
+
+        return newActor;
+    }else {
+        return nullptr;
+    }
+}
+
+
+void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementInfo const& placement, const char* propArchiveName) { 
+    int serverMaxPlayers = Client::getMaxPlayerCount();
+
+    for (size_t i = 0; i < serverMaxPlayers - 1; i++)
+    {
+        PuppetActor* curPuppet = Client::getPuppet(i);
+        if (curPuppet) {
+
+            const char* hackName = tryConvertName(propArchiveName);
+
+            // make sure we only make as many unique puppet hack actors as needed
+            if(!curPuppet->isInCaptureList(hackName)) {
+
+                PuppetHackActor* dupliActor = createPuppetHackActorFromFactory(
+                    initInfo, &placement, curPuppet->getInfo(), hackName);
+                if (dupliActor) {
+                    curPuppet->addCapture(dupliActor, hackName);
+                }
+            }
+        }
+    }
+
+    PuppetActor* debugPuppet = Client::getDebugPuppet();
+
+    if (debugPuppet) {
+        const char* hackName = tryConvertName(propArchiveName);
+        if(!debugPuppet->isInCaptureList(hackName)) {
+
+            PuppetHackActor *dupliActor = createPuppetHackActorFromFactory(initInfo, &placement, debugPuppet->getInfo(), hackName);
+            if (dupliActor) {
+                debugPuppet->addCapture(dupliActor, hackName);
             }
         }
     }
 }
 
-void PuppetHackActor::startHackAnim(bool isOn) {
-
-    const char *animName = isOn ? "HackOn" : "HackOff";
-    const char *capOffName = isOn ? "HackOnCapOff" : "HackOffCapOff";
-
-    if (al::isVisAnimExist(this, animName)) {
-        al::startVisAnim(this, animName);
-    } else if (al::isVisAnimExist(this, capOffName)) {
-        al::startVisAnim(this, capOffName);
+void PuppetHackActor::initAllActors(al::ActorInitInfo const &initInfo, al::PlacementInfo const& placement) {
+    for (int32_t i = 0; i < static_cast<int32_t>(CaptureTypes::Type::End); i++) {
+        const char* propArchiveName = CaptureTypes::FindStr(static_cast<CaptureTypes::Type>(i));
+        initAllActorsForPropType(initInfo, placement, propArchiveName);
     }
-
-    if (al::isMtpAnimExist(this, animName)) {
-        al::startMtpAnim(this, animName);
-    } else if (al::isMtpAnimExist(this, capOffName)) {
-        al::startMtpAnim(this, capOffName);
-    }
-
-    if (al::isMclAnimExist(this, animName)) {
-        al::startMclAnim(this, animName);
-    } else if (al::isMclAnimExist(this, capOffName)) {
-        al::startMclAnim(this, capOffName);
-    }
-
-    // note: we will need to handle special names for hack start anims 
-
 }

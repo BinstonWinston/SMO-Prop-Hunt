@@ -66,7 +66,8 @@ void initPuppetActors(al::Scene *scene, al::ActorInitInfo const &rootInfo, char 
         }
 
         FlagActor::initAllActors(rootInfo, playerPlacement);
-        
+        PuppetHackActor::initAllActors(rootInfo, playerPlacement);
+
         // create a debug puppet for testing purposes
         // createPuppetActorFromFactory(rootInfo, playerPlacement, true);
     }

@@ -71,9 +71,6 @@ B59E28 B seadPrintHook // sead::system::print
 // Remap Snapshot to !L + Down
 577014 B comboBtnHook
 
-// Capture Syncing
-9CFB84 BL initObjHook
-
 // Save Data Edits
 5167D0: GameConfigData::write+D0
     B saveWriteHook
