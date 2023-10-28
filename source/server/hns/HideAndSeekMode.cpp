@@ -260,9 +260,9 @@ void HideAndSeekMode::disablePropMode(PlayerActorBase* playerBase, bool isYukima
     if (!isYukimaru) {
         reinterpret_cast<PlayerActorHakoniwa*>(playerBase)->mModelChanger->showModel();
     }
-    if (FlagActor::singleton) { // Hide prop
-        FlagActor::singleton->makeActorDead();
-    }
+    // if (FlagActor::singleton) { // Hide prop
+    //     FlagActor::singleton->makeActorDead();
+    // }
 }
 
 void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {

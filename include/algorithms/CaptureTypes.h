@@ -8,39 +8,8 @@ namespace CaptureTypes {
 
     enum class Type : s16 {
         Unknown = -1,
-        AnagramAlphabetCharacter,
-        Byugo, 
-        Bubble, 
-        Bull, 
-        Car, 
-        ElectricWire,
-        KillerLauncherMagnum, 
-        KuriboPossessed,
-        WanwanBig,
-        KillerLauncher, 
-        Koopa,
-        Wanwan,
-        Pukupuku, 
-        PukupukuSnow,
-        Gamane,
-        FireBrosPossessed, 
-        PackunFire, 
-        Frog, 
-        Kakku, 
-        Hosui, 
-        HammerBrosPossessed, 
-        Megane,
-        KaronWing, 
-        KuriboWing, 
-        PackunPoison, 
-        Radicon, 
-        Tank, 
-        Tsukkun, 
-        TRex, 
-        TRexSleep,
-        TRexPatrol,
-        Imomu, 
-        SenobiGeneratePoint,
+        SandWorldHomeLift001,
+        CityWorldHomeFence003,
         End
     };
 
@@ -49,39 +18,8 @@ namespace CaptureTypes {
     static constexpr Type ToType(std::uint16_t value) {return static_cast<Type>(value);}
 
     static constexpr std::array<const char*, ToValue(Type::End)> s_Strs {
-        "AnagramAlphabetCharacter",
-        "Byugo", 
-        "Bubble", 
-        "Bull", 
-        "Car", 
-        "ElectricWire",
-        "KillerLauncherMagnum", 
-        "KuriboPossessed",
-        "WanwanBig",  // has sub-actors
-        "KillerLauncher", 
-        "Koopa",
-        "Wanwan",  // has sub-actors
-        "Pukupuku", 
-        "PukupukuSnow",
-        "Gamane",  // has sub-actors
-        "FireBrosPossessed", 
-        "PackunFire", 
-        "Frog", 
-        "Kakku", 
-        "Hosui", 
-        "HammerBrosPossessed", 
-        "Megane",
-        "KaronWing", 
-        "KuriboWing", 
-        "PackunPoison", 
-        "Radicon", 
-        "Tank", 
-        "Tsukkun", 
-        "TRex", 
-        "TRexSleep",
-        "TRexPatrol",
-        "Imomu", 
-        "SenobiGeneratePoint"
+        "PropHuntSandWorldHomeLift001",
+        "PropHuntCityWorldHomeFence003"
     };
 
     // these ifdefs are really dumb but it makes clangd happy so /shrug

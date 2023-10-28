@@ -37,6 +37,7 @@ class FlagActor : public al::LiveActor {
         static FlagActor* singleton;
         static FlagActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);
+        static const char* getCurrentPropName();
 
         FlagActor(const char* name);
         virtual void init(al::ActorInitInfo const &) override;

@@ -6,6 +6,7 @@
 #include "logger.hpp"
 #include "packets/Packet.h"
 #include "server/hns/HideAndSeekMode.hpp"
+#include "actors/FlagActor.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(Client)
 
@@ -444,22 +445,12 @@ void Client::sendPlayerInfPacket(const PlayerActorBase *playerBase, bool isYukim
             packet->animBlendWeights[i] = player->mPlayerAnimator->getBlendWeight(i);
         }
 
-        const char *hackName = player->mHackKeeper->getCurrentHackName();
+        const char *hackName = FlagActor::getCurrentPropName();
 
         if (hackName != nullptr) {
-
             sInstance->isClientCaptured = true;
-
-            const char* actName = al::getActionName(player->mHackKeeper->currentHackActor);
-
-            if (actName) {
-                packet->actName = PlayerAnims::FindType(actName);
-                packet->subActName = PlayerAnims::Type::Unknown;
-                //strcpy(packet.actName, actName); 
-            } else {
-                packet->actName = PlayerAnims::Type::Unknown;
-                packet->subActName = PlayerAnims::Type::Unknown;
-            }
+            packet->actName = PlayerAnims::Type::Unknown;
+            packet->subActName = PlayerAnims::Type::Unknown;
         } else {
             packet->actName = PlayerAnims::FindType(player->mPlayerAnimator->mAnimFrameCtrl->getActionName());
             packet->subActName = PlayerAnims::FindType(player->mPlayerAnimator->curSubAnim.cstr());
@@ -679,7 +670,7 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
     if (sInstance->isClientCaptured && !sInstance->isSentCaptureInf) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
-        strcpy(packet->hackName, tryConvertName(player->mHackKeeper->getCurrentHackName()));
+        strcpy(packet->hackName, tryConvertName(FlagActor::getCurrentPropName()));
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = true;
