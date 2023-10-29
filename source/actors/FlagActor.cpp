@@ -15,7 +15,7 @@
 #include "random/seadRandom.h"
 #include "time/seadTickTime.h"
 
-FlagActor* FlagActor::props[static_cast<u32>(CaptureTypes::Type::End)] = {nullptr};
+FlagActor* FlagActor::props[CaptureTypes::MAX_PROPS_PER_KINGDOM] = {nullptr};
 
 FlagActor::FlagActor(const char* name) : al::LiveActor(name) {
     kill();
@@ -32,12 +32,12 @@ void FlagActor::init(al::ActorInitInfo const &initInfo) {
 
     al::initActorPoseTQSV(this);
 
-    al::hideSilhouetteModelIfShow(this);
+    // al::hideSilhouetteModelIfShow(this);
 
-    if(al::isExistDitherAnimator(this)) {
-        // Logger::log("Disabling Dither Animator.\n");
-        al::invalidateDitherAnim(this);
-    }
+    // if(al::isExistDitherAnimator(this)) {
+    //     // Logger::log("Disabling Dither Animator.\n");
+    //     al::invalidateDitherAnim(this);
+    // }
 
     if (al::isExistCollisionParts(this)) {
         // Logger::log(("Disabling Collision.\n"));
@@ -46,7 +46,7 @@ void FlagActor::init(al::ActorInitInfo const &initInfo) {
 
     al::invalidateHitSensors(this);
 
-    al::invalidateClipping(this);
+    // al::invalidateClipping(this);
 
     al::offCollide(this);
 
@@ -128,8 +128,9 @@ FlagActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, a
 }
 
 void FlagActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
-    for (int32_t i = 0; i < static_cast<int32_t>(CaptureTypes::Type::End); i++) {
-        const char* propArchiveName = CaptureTypes::FindStr(static_cast<CaptureTypes::Type>(i));
+    const auto range = CaptureTypes::getTypesForCurrentWorld();
+    for (int32_t i = 0; i < range.size(); i++) {
+        const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));
         FlagActor::props[i] = FlagActor::createFromFactory(rootInfo, placement, propArchiveName);
     }
 }

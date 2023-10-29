@@ -263,13 +263,13 @@ FlagActor* HideAndSeekMode::getPropActor() {
     if (mInfo->mPropType == CaptureTypes::Type::Unknown) {
         return nullptr;
     }
-    return FlagActor::props[static_cast<u32>(mInfo->mPropType)];
+    return FlagActor::props[static_cast<u32>(mInfo->mPropType) - static_cast<u32>(CaptureTypes::getTypesForCurrentWorld().start)];
 }
 
 void HideAndSeekMode::enablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {
     sead::Random random(static_cast<u32>(sead::TickTime().toTicks()));
 
-    mInfo->mPropType = static_cast<CaptureTypes::Type>(random.getU32(static_cast<u32>(CaptureTypes::Type::End)));
+    mInfo->mPropType = static_cast<CaptureTypes::Type>(random.getU32(CaptureTypes::getTypesForCurrentWorld().size()) + CaptureTypes::ToValue(CaptureTypes::getTypesForCurrentWorld().start));
     if (!isYukimaru) {
         reinterpret_cast<PlayerActorHakoniwa*>(playerBase)->mModelChanger->hideModel();
     }

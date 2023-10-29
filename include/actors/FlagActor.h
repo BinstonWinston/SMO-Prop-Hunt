@@ -35,7 +35,7 @@ struct FlagInfo {
 
 class FlagActor : public al::LiveActor {
     public:
-        static FlagActor* props[static_cast<u32>(CaptureTypes::Type::End)];
+        static FlagActor* props[CaptureTypes::MAX_PROPS_PER_KINGDOM];
         static FlagActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);
 

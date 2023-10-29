@@ -60,16 +60,6 @@ PuppetHackActor *createPuppetHackActorFromFactory(al::ActorInitInfo const &rootI
 
     int serverMaxPlayers = Client::getMaxPlayerCount(); // TODO: Find a way around needing to do this, such as creating a single hack actor per puppet that can dynamically switch models
 
-    // only use this if player count is 8
-    if (serverMaxPlayers == 8) {
-        const char *stageName = "";
-        if (actorInitInfo.mPlacementInfo._0.tryGetStringByKey(&stageName, "PlacementFileName")) {
-            if (al::isEqualString(stageName, "ForestWorldHomeStage")) {
-                return nullptr;
-            }
-        }
-    }
-
     if (serverMaxPlayers > 8) { // disable capture sync if dealing with more than 8 players
         return nullptr;
     }
@@ -127,8 +117,9 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
 }
 
 void PuppetHackActor::initAllActors(al::ActorInitInfo const &initInfo, al::PlacementInfo const& placement) {
-    for (int32_t i = 0; i < static_cast<int32_t>(CaptureTypes::Type::End); i++) {
-        const char* propArchiveName = CaptureTypes::FindStr(static_cast<CaptureTypes::Type>(i));
-        initAllActorsForPropType(initInfo, placement, propArchiveName);
-    }
+    // const auto range = CaptureTypes::getTypesForCurrentWorld();
+    // for (int32_t i = 0; i < range.size(); i++) {
+    //     const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));
+    //     initAllActorsForPropType(initInfo, placement, propArchiveName);
+    // }
 }

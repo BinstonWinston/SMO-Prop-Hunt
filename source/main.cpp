@@ -117,6 +117,14 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
         gTextWriter->printf("Gamemode Heap Free Size: %f/%f\n", gmHeap->getFreeSize() * 0.001f, gmHeap->getSize()* 0.001f);
     }
 
+    al::Scene *curScene = curSequence->curScene;
+    if (curScene && isInGame) {
+        auto& holder = ((StageScene*)curScene)->mHolder;
+        gTextWriter->printf("WorldId: %d\n", GameDataFunction::getCurrentWorldId(holder));
+        gTextWriter->printf("Cached WorldId: %d\n", CaptureTypes::currentWorldId);
+        gTextWriter->printf("lastUsedCurrentWorldId: %d\n", CaptureTypes::lastUsedCurrentWorldId);
+    }
+
     gTextWriter->printf("Client Socket Connection Status: %s\n", Client::instance()->mSocket->getStateChar());
     gTextWriter->printf("Udp socket status: %s\n", Client::instance()->mSocket->getUdpStateChar());
     //gTextWriter->printf("nn::socket::GetLastErrno: 0x%x\n", Client::instance()->mSocket->socket_errno);
@@ -124,8 +132,6 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
     
     gTextWriter->printf("Send Queue Count: %d/%d\n", Client::instance()->mSocket->getSendCount(), Client::instance()->mSocket->getSendMaxCount());
     gTextWriter->printf("Recv Queue Count: %d/%d\n", Client::instance()->mSocket->getRecvCount(), Client::instance()->mSocket->getRecvMaxCount());
-
-    al::Scene *curScene = curSequence->curScene;
 
     if(curScene && isInGame) {
 
@@ -340,6 +346,8 @@ bool threadInit(HakoniwaSequence *mainSeq) {  // hook for initializing client cl
 
 bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
     StageScene* stageScene = (StageScene*)sequence->curScene;
+
+    CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(stageScene->mHolder);
 
     static bool isCameraActive = false;
 
