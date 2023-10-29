@@ -75,10 +75,9 @@ namespace CaptureTypes {
         /* Sea */ \
         X(SeaWorldHomeGatePillar000) \
         X(SeaWorldHomeWaveSurfParts000) \
-        X(SeaWorldHomeBottle000) \
-        X(SeaWorldHomeSwitchKeyMoveParts000) \
         X(SeaWorldHomeGlassWaveSurfParts) \
         X(SeaWorldHomePillar002) \
+        X(VolleyballNet) \
         X(WorldEndType__SeaWorld) \
         /* Snow */ \
         X(SnowWorldHomeWindBlowParts000) \
@@ -89,13 +88,11 @@ namespace CaptureTypes {
         X(WorldEndType__SnowWorld) \
         /* Lava */ \
         X(LavaWorldWireStep000) \
-        X(LavaWorldFenceLiftExKeyMoveParts000) \
-        X(LavaWorldHomeClockParts000) \
-        X(LavaWorldHomeRiseParts002) \
-        X(LavaWorldHomeTimer002WobbleParts000) \
         X(LavaWorldHomeRock000) \
         X(LavaWorldHomeGroundParts002) \
         X(WorldEndType__LavaWorld) \
+        /* BossRaidWorld (Ruined) */ \
+        X(WorldEndType__BossRaidWorld) \
         /* Sky */ \
         X(SkyWorldHomeTorch000) \
         X(SkyWorldHomeLanternAStand) \
@@ -108,15 +105,14 @@ namespace CaptureTypes {
         X(MoonRock) \
         X(MoonWorldTableB) \
         X(MoonWorldCaptureParadeFence000) \
-        X(MoonWorldCaptureParadeMeganeStep000) \
         X(MoonWorldBreakParts) \
         X(WorldEndType__MoonWorld) \
         /* Peach */ \
-        /*X(PeachWorldHomeBridge) \
-        /*X(PeachWorldHomeTree000) \
-        *X(PeachWorldHomeTree001) \
-        /*X(PeachWorldHomeTower000) \
-        X(PeachWorldHomeGarden)*/ \
+        X(PeachWorldHomeBridge) \
+        X(PeachWorldHomeTree000) \
+        X(PeachWorldHomeTree001) \
+        X(PeachWorldHomeTower000) \
+        X(PeachWorldHomeGarden) \
         X(WorldEndType__PeachWorld) \
         /* Special1 */ \
         X(WorldEndType__Special1World) \
@@ -186,7 +182,7 @@ namespace CaptureTypes {
             return Type::Unknown;
         }
 
-        std::array<Type, 17> worldEndTypes = {
+        std::array<Type, 18> worldEndTypes = {
             Type::WorldEndType__CapWorld,
             Type::WorldEndType__WaterfallWorld,
             Type::WorldEndType__SandWorld,
@@ -198,6 +194,7 @@ namespace CaptureTypes {
             Type::WorldEndType__SeaWorld,
             Type::WorldEndType__SnowWorld,
             Type::WorldEndType__LavaWorld,
+            Type::WorldEndType__BossRaidWorld,
             Type::WorldEndType__SkyWorld,
             Type::WorldEndType__MoonWorld,
             Type::WorldEndType__PeachWorld,

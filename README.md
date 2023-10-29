@@ -1,7 +1,7 @@
 # Based on CraftyBoss/SuperMarioOdysseyOnline **v1.4.0**
 Huge thanks to CraftyBoss, Sanae, and all the other folks who made SMO online! This mod uses that code as a base and replaces capture sync with prop sync and adds a bit of additional logic on the client for props. 
 
-The SMOO server is unchanged so running any SMOO server (that supports client v1.4.0) should work, though you should ensure all users are using Prop Hunt and none are using a standard hide and seek build, otherwise it could cause issues.
+The SMOO server is unchanged so running any SMOO server (that supports client v1.4.0) should work, though you should ensure all users are using Prop Hunt and none are using a standard hide and seek build, otherwise it could cause issues. The commit `dd0de0d build binary files via docker` from SmoOnlineServer has been tested to work with this build (tho any build should work as long as it supports client v1.4.0 that this is based on)
 
 ### Controls (same as SMO online with these additions)
 * Randomize Prop (switch between hider and seeker)
@@ -10,18 +10,19 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 
 ### :warning: Known Issues
 * Switching kingdoms while a prop is active crashes the game. For now, please turn off props when switching kingdoms (either go into seeker mode or turn off the Hide&Seek game mode) 
+* Sometimes props take a sec to appear, try moving around or switching between hider and seeker
 
 ### Kingdoms Supported
 * Cap
 * Cascade
 * Sand
-* Wooded (limited object set due to crashes, probably memory limit related)
+* Wooded (limited prop set due to crashes, probably memory limit related)
 * Lake
 * Lost
-* Metro
-* Snow (limited object set because there aren't a lot of good ones)
+* Metro (has the most props, so will probably be the best experience)
+* Snow
 * Seaside
-* Luncheon
+* Luncheon (working but could use some more objects)
 * Bowser's
 * Moon
 * Mushroom
