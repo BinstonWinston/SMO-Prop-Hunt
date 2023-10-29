@@ -344,20 +344,21 @@ bool threadInit(HakoniwaSequence *mainSeq) {  // hook for initializing client cl
     return GameDataFunction::isPlayDemoOpening(mainSeq->mGameDataHolder);
 }
 
+bool isHoldPositionInAir = false;
+void holdPositionInAir(PlayerActorBase* player) {
+    // From here https://github.com/CraftyBoss/SMO-Exlaunch-Base/blob/master/src/program/main.cpp#L37C1-L37C1
+    sead::Vector3f *playerPos = al::getTransPtr(player);
+    // Its better to do this here because loading zones reset this.
+    al::setVelocityZero(player);
+    // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
+    playerPos->y += 1.5203f;
+}
+
 bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
     StageScene* stageScene = (StageScene*)sequence->curScene;
 
     {
         CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(stageScene->mHolder);
-        
-        // if (GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK) &&
-        //     CaptureTypes::currentWorldId != CaptureTypes::lastUsedCurrentWorldId) {
-        //     // Reset prop when switching kingdoms
-        //     HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
-        //     if (hsMode) {
-        //         hsMode->resetProp();
-        //     }
-        // }
     }
 
     static bool isCameraActive = false;
@@ -379,6 +380,14 @@ bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
     updatePlayerInfo(stageScene->mHolder, playerBase, isYukimaru);
 
     static bool isDisableMusic = false;
+
+    if (!isFirstStep && playerBase && !isYukimaru && isInGame && isHoldPositionInAir) {
+        holdPositionInAir(playerBase);
+    }
+
+    if (al::isPadHoldR(-1) && al::isPadTriggerRight(-1)) {
+        isHoldPositionInAir = !isHoldPositionInAir;
+    }
 
     if (al::isPadHoldZR(-1)) {
         if (al::isPadTriggerUp(-1)) debugMode = !debugMode;
