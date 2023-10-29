@@ -25,7 +25,9 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Luncheon (working but could use some more objects)
 * Bowser's
 * Moon
-* Mushroom
+* Mushroom  
+
+
 Props for each kingdom are defined in `include/algorithms/CaptureTypes.h`
 
 
