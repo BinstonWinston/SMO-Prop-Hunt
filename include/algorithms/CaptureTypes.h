@@ -72,13 +72,6 @@ namespace CaptureTypes {
         X(CityWorldHomeTree000) \
         X(CityWorldHomeSignal000) \
         X(WorldEndType__CityWorld) \
-        /* Snow */ \
-        X(SnowWorldHomeWindBlowParts000) \
-        X(SnowWorldHomeWindBlowParts001) \
-        X(SnowMan) \
-        X(SnowWorldHomeIce000) \
-        X(TreasureBox) \
-        X(WorldEndType__SnowWorld) \
         /* Sea */ \
         X(SeaWorldHomeGatePillar000) \
         X(SeaWorldHomeWaveSurfParts000) \
@@ -87,6 +80,13 @@ namespace CaptureTypes {
         X(SeaWorldHomeGlassWaveSurfParts) \
         X(SeaWorldHomePillar002) \
         X(WorldEndType__SeaWorld) \
+        /* Snow */ \
+        X(SnowWorldHomeWindBlowParts000) \
+        X(SnowWorldHomeWindBlowParts001) \
+        X(SnowMan) \
+        X(SnowWorldHomeIce000) \
+        X(TreasureBox) \
+        X(WorldEndType__SnowWorld) \
         /* Lava */ \
         X(LavaWorldWireStep000) \
         X(LavaWorldFenceLiftExKeyMoveParts000) \
@@ -195,8 +195,8 @@ namespace CaptureTypes {
             Type::WorldEndType__CloudWorld,
             Type::WorldEndType__ClashWorld,
             Type::WorldEndType__CityWorld,
-            Type::WorldEndType__SnowWorld,
             Type::WorldEndType__SeaWorld,
+            Type::WorldEndType__SnowWorld,
             Type::WorldEndType__LavaWorld,
             Type::WorldEndType__SkyWorld,
             Type::WorldEndType__MoonWorld,

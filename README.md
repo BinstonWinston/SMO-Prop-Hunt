@@ -19,7 +19,7 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Lake
 * Lost
 * Metro
-* Snow
+* Snow (limited object set because there aren't a lot of good ones)
 * Seaside
 * Luncheon
 * Bowser's
