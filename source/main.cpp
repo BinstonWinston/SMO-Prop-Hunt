@@ -298,7 +298,11 @@ void sendShinePacket(GameDataHolderAccessor thisPtr, Shine* curShine) {
 }
 
 void stageInitHook(al::ActorInitInfo *info, StageScene *curScene, al::PlacementInfo const *placement, al::LayoutInitInfo const *lytInfo, al::ActorFactory const *factory, al::SceneMsgCtrl *sceneMsgCtrl, al::GameDataHolderBase *dataHolder) {
-
+    {
+        CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(curScene->mHolder);
+    }
+    
+    
     al::initActorInitInfo(info, curScene, placement, lytInfo, factory, sceneMsgCtrl,
                           dataHolder);
 
@@ -361,10 +365,6 @@ void holdPositionInAir(PlayerActorBase* player) {
 
 bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
     StageScene* stageScene = (StageScene*)sequence->curScene;
-
-    {
-        CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(stageScene->mHolder);
-    }
 
     static bool isCameraActive = false;
 

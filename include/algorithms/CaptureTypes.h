@@ -25,10 +25,6 @@ namespace CaptureTypes {
         X(WaterfallWorldHomeRock000) \
         X(WaterfallWorldHomeBreakFence000) \
         X(WaterfallWorldBreakParts006) \
-        X(WaterfallWorldBreakParts003) \
-        X(WaterfallWorldHomeBreakBone000) \
-        X(WaterfallWorldHomeBreakElectricPole000) \
-        X(WaterfallWorldHomeBone000) \
         X(WorldEndType__WaterfallWorld) \
         /* Sand */ \
         X(SandWorldHomeMeltIce000) \
