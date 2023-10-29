@@ -230,6 +230,17 @@ void HideAndSeekMode::update() {
         Client::sendTagInfPacket();
     }
 
+    if (al::isPadHoldZR(-1) && al::isPadTriggerRight(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown) {
+        disablePropMode(playerBase, isYukimaru); // Hide current prop
+        auto propId = static_cast<s32>(mInfo->mPropType) - static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
+        propId = std::max(0, propId);
+        propId++; // Go to next prop
+        propId %= CaptureTypes::getTypesForCurrentWorld().size();
+        propId += static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
+        mInfo->mPropType = static_cast<CaptureTypes::Type>(propId);
+        enablePropMode(playerBase, isYukimaru);
+    }
+
     // Sync prop state with hiding/seeking state
     if (mInfo->mIsPlayerIt && isPropActive()) {
         disablePropMode(playerBase, isYukimaru);

@@ -15,24 +15,54 @@ namespace CaptureTypes {
     #define PROP_OBJECT_LIST \
         /* Cap */ \
         X(SignBoardDanger) \
+        X(CapWorldHomeCapHanger004) \
+        X(FrailBox) \
+        X(CapWorldTowerFloaterParts000) \
+        X(CoinRing) \
+        X(CapWorldCandlestand000) \
         X(WorldEndType__CapWorld) \
         /* Waterfall */ \
         X(WaterfallWorldHomeRock000) \
+        X(WaterfallWorldHomeBreakFence000) \
+        X(WaterfallWorldBreakParts006) \
+        X(WaterfallWorldBreakParts003) \
+        X(WaterfallWorldHomeBreakBone000) \
+        X(WaterfallWorldHomeBreakElectricPole000) \
+        X(WaterfallWorldHomeBone000) \
         X(WorldEndType__WaterfallWorld) \
         /* Sand */ \
         X(SandWorldHomeMeltIce000) \
+        X(SandWorldHomeIcePillar) \
+        X(SandWorldHomeStonePillar001) \
+        X(SandWorldHomeLift001) \
+        X(SphinxQuiz) \
+        X(CollectAnimal) \
+        X(SandWorldCandlestand000) \
         X(WorldEndType__SandWorld) \
         /* Lake */ \
         X(LakeWorldHomeStonePillar002) \
+        X(LakeWorldHomeFloatingIsland000) \
+        X(Dokan) \
+        X(LakeWorldHomeTown002) \
+        X(LakeWorldHomeStonePillar000) \
+        X(LakeWorldHomeStonePillar008) \
         X(WorldEndType__LakeWorld) \
         /* Forest */ \
         X(ForestWorldHomeRock000) \
+        X(ForestWorldHomeRiseParts001) \
+        X(ForestWorldHomeFallParts000) \
+        X(ForestWorldHomeTree000) \
+        X(ForestWorldHomeKeyMoveParts000) \
+        X(Poetter) \
         X(WorldEndType__ForestWorld) \
         /* Cloud */ \
         X(CapAppearTargetStepC) \
         X(WorldEndType__CloudWorld) \
         /* Clash */ \
         X(ClashWorldHomeTree000) \
+        X(CageBreakable) \
+        X(ClashWorldBreakParts000) \
+        X(ClashWorldHomeTree003) \
         X(WorldEndType__ClashWorld) \
         /* City */ \
         X(FireHydrant) \
@@ -50,24 +80,49 @@ namespace CaptureTypes {
         X(WorldEndType__CityWorld) \
         /* Snow */ \
         X(SnowWorldHomeWindBlowParts000) \
+        X(SnowWorldHomeWindBlowParts001) \
+        X(SnowMan) \
+        X(SnowWorldHomeIce000) \
+        X(TreasureBox) \
         X(WorldEndType__SnowWorld) \
         /* Sea */ \
         X(SeaWorldHomeGatePillar000) \
+        X(SeaWorldHomeWaveSurfParts000) \
+        X(SeaWorldHomeBottle000) \
+        X(SeaWorldHomeSwitchKeyMoveParts000) \
+        X(SeaWorldHomeGlassWaveSurfParts) \
+        X(SeaWorldHomePillar002) \
         X(WorldEndType__SeaWorld) \
         /* Lava */ \
         X(LavaWorldWireStep000) \
+        X(LavaWorldFenceLiftExKeyMoveParts000) \
+        X(LavaWorldHomeClockParts000) \
+        X(LavaWorldHomeRiseParts002) \
+        X(LavaWorldHomeTimer002WobbleParts000) \
+        X(LavaWorldHomeRock000) \
+        X(LavaWorldHomeGroundParts002) \
         X(WorldEndType__LavaWorld) \
         /* Sky */ \
         X(SkyWorldHomeTorch000) \
         X(SkyWorldHomeLanternAStand) \
+        X(SkyWorldHomeStatue001) \
+        X(SkyWorldHomeTimer000FixParts000) \
+        X(SkyWorldHomeStep000) \
+        X(SkyWorldHomeStep002) \
         X(WorldEndType__SkyWorld) \
         /* Moon */ \
         X(MoonRock) \
         X(MoonWorldTableB) \
+        X(MoonWorldCaptureParadeFence000) \
+        X(MoonWorldCaptureParadeMeganeStep000) \
+        X(MoonWorldBreakParts) \
         X(WorldEndType__MoonWorld) \
         /* Peach */ \
-        X(PeachWorldHomeBridge) \
-        X(GrowFlowerPot) \
+        /*X(PeachWorldHomeBridge) \
+        /*X(PeachWorldHomeTree000) \
+        *X(PeachWorldHomeTree001) \
+        /*X(PeachWorldHomeTower000) \
+        X(PeachWorldHomeGarden)*/ \
         X(WorldEndType__PeachWorld) \
         /* Special1 */ \
         X(WorldEndType__Special1World) \
