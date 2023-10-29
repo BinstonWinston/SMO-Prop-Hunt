@@ -1,4 +1,7 @@
 # Based on CraftyBoss/SuperMarioOdysseyOnline **v1.4.0**
+* [SuperMarioOdysseyOnline](https://github.com/CraftyBoss/SuperMarioOdysseyOnline)
+* [SmoOnlineServer](https://github.com/Sanae6/SmoOnlineServer)  
+  
 Huge thanks to CraftyBoss, Sanae, and all the other folks who made SMO online! This mod uses that code as a base and replaces capture sync with prop sync and adds a bit of additional logic on the client for props. 
 
 The SMOO server is unchanged so running any SMOO server (that supports client v1.4.0) should work, though you should ensure all users are using Prop Hunt and none are using a standard hide and seek build, otherwise it could cause issues. The commit `dd0de0d build binary files via docker` from SmoOnlineServer has been tested to work with this build (tho any build should work as long as it supports client v1.4.0 that this is based on)
