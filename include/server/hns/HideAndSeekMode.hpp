@@ -31,6 +31,11 @@ class HideAndSeekMode : public GameModeBase {
         virtual void end() override;
 
         bool isPlayerIt() const { return mInfo->mIsPlayerIt; };
+        bool resetProp() {
+            if (mInfo != nullptr) {
+                mInfo->mPropType = CaptureTypes::Type::Unknown;
+            }
+        }
 
         void setPlayerTagState(bool state) { mInfo->mIsPlayerIt = state; }
 

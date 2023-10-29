@@ -28,16 +28,16 @@ void PropActor::initProp(const char* archiveName) {
 void PropActor::init(al::ActorInitInfo const &initInfo) {
 
     auto* normalModel = this;
-    al::initActorWithArchiveName(this, initInfo, /*"FireHydrant"*/mArchiveName, nullptr);
+    al::initActorWithArchiveName(this, initInfo, mArchiveName, nullptr);
 
     al::initActorPoseTQSV(this);
 
     // al::hideSilhouetteModelIfShow(this);
 
-    // if(al::isExistDitherAnimator(this)) {
-    //     // Logger::log("Disabling Dither Animator.\n");
-    //     al::invalidateDitherAnim(this);
-    // }
+    if(al::isExistDitherAnimator(this)) {
+        // Logger::log("Disabling Dither Animator.\n");
+        al::invalidateDitherAnim(this);
+    }
 
     if (al::isExistCollisionParts(this)) {
         // Logger::log(("Disabling Collision.\n"));
@@ -46,7 +46,9 @@ void PropActor::init(al::ActorInitInfo const &initInfo) {
 
     al::invalidateHitSensors(this);
 
-    // al::invalidateClipping(this);
+    al::setClippingInfo(this, 50000.0f, 0);
+    al::setClippingNearDistance(this, 50000.0f);
+    al::validateClipping(this);
 
     al::offCollide(this);
 
@@ -69,7 +71,7 @@ void PropActor::control() {
     sead::Vector3f* pPos = al::getTransPtr(this);
     sead::Quatf *pQuat = al::getQuatPtr(this);
 
-    *pPos = m_info.pos;
+    *pPos = m_info.pos + sead::Vector3f(0, 1, 0);
     *pQuat = m_info.rot;
 
     // Syncing
@@ -128,6 +130,10 @@ PropActor *PropActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, a
 }
 
 void PropActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
+    for (int32_t i = 0; i < sizeof(PropActor::props) / sizeof(PropActor::props[0]); i++) {
+        PropActor::props[i] = nullptr;
+    }
+
     const auto range = CaptureTypes::getTypesForCurrentWorld();
     for (int32_t i = 0; i < range.size(); i++) {
         const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));

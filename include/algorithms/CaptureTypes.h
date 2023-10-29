@@ -37,8 +37,16 @@ namespace CaptureTypes {
         /* City */ \
         X(FireHydrant) \
         X(CityWorldHomeFence003) \
-        X(BlowObjPylon) \
-        X(CarBreakable) \
+        X(Car) \
+        X(CityWorldTableB) \
+        X(CityWorldTableC) \
+        X(CityWorldChairB) \
+        X(StreetlightA) \
+        X(ParkingMeter) \
+        X(CityWorldHomeStep033) \
+        X(CityWorldHomeFrame009) \
+        X(CityWorldHomeTree000) \
+        X(CityWorldHomeSignal000) \
         X(WorldEndType__CityWorld) \
         /* Snow */ \
         X(SnowWorldHomeWindBlowParts000) \

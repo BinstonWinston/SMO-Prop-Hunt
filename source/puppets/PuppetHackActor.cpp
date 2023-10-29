@@ -16,7 +16,7 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
 
     al::initActorPoseTQSV(this);
 
-    al::hideSilhouetteModelIfShow(this);
+    // al::hideSilhouetteModelIfShow(this);
 
     if(al::isExistDitherAnimator(this)) {
         // Logger::log("Disabling Dither Animator.\n");
@@ -117,9 +117,9 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
 }
 
 void PuppetHackActor::initAllActors(al::ActorInitInfo const &initInfo, al::PlacementInfo const& placement) {
-    // const auto range = CaptureTypes::getTypesForCurrentWorld();
-    // for (int32_t i = 0; i < range.size(); i++) {
-    //     const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));
-    //     initAllActorsForPropType(initInfo, placement, propArchiveName);
-    // }
+    const auto range = CaptureTypes::getTypesForCurrentWorld();
+    for (int32_t i = 0; i < range.size(); i++) {
+        const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));
+        initAllActorsForPropType(initInfo, placement, propArchiveName);
+    }
 }

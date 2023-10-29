@@ -347,7 +347,18 @@ bool threadInit(HakoniwaSequence *mainSeq) {  // hook for initializing client cl
 bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
     StageScene* stageScene = (StageScene*)sequence->curScene;
 
-    CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(stageScene->mHolder);
+    {
+        CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(stageScene->mHolder);
+        
+        // if (GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK) &&
+        //     CaptureTypes::currentWorldId != CaptureTypes::lastUsedCurrentWorldId) {
+        //     // Reset prop when switching kingdoms
+        //     HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+        //     if (hsMode) {
+        //         hsMode->resetProp();
+        //     }
+        // }
+    }
 
     static bool isCameraActive = false;
 
