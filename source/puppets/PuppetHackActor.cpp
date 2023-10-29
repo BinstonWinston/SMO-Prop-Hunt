@@ -18,9 +18,11 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
 
     // al::hideSilhouetteModelIfShow(this);
 
-    if(al::isExistDitherAnimator(this)) {
-        // Logger::log("Disabling Dither Animator.\n");
-        al::invalidateDitherAnim(this);
+    if (CaptureTypes::currentWorldId != 1) { // This crashes on Cascade for some reason
+        if(al::isExistDitherAnimator(this)) {
+            // Logger::log("Disabling Dither Animator.\n");
+            al::invalidateDitherAnim(this);
+        }
     }
 
     if (al::isExistCollisionParts(this)) {

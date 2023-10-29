@@ -1,4 +1,32 @@
 # Based on CraftyBoss/SuperMarioOdysseyOnline **v1.4.0**
+Huge thanks to CraftyBoss, Sanae, and all the other folks who made SMO online! This mod uses that code as a base and replaces capture sync with prop sync and adds a bit of additional logic on the client for props. 
+
+The SMOO server is unchanged so running any SMOO server (that supports client v1.4.0) should work, though you should ensure all users are using Prop Hunt and none are using a standard hide and seek build, otherwise it could cause issues.
+
+### Controls (same as SMO online with these additions)
+* Randomize Prop (switch between hider and seeker)
+* Rotate thru Props (ZR + DpadRight)
+* Freeze in mid-air (R + DpadRight), useful for getting the exact positioning for a prop to blend in
+
+### :warning: Known Issues
+* Switching kingdoms while a prop is active crashes the game. For now, please turn off props when switching kingdoms (either go into seeker mode or turn off the Hide&Seek game mode) 
+
+### Kingdoms Supported
+* Cap
+* Cascade
+* Sand
+* Wooded (limited object set due to crashes, probably memory limit related)
+* Lake
+* Lost
+* Metro
+* Snow
+* Seaside
+* Luncheon
+* Bowser's
+* Moon
+* Mushroom
+Props for each kingdom are defined in `include/algorithms/CaptureTypes.h`
+
 
 # Super Mario Odyssey - Online Multiplayer Mod
 

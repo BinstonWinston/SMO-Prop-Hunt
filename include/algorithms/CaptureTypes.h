@@ -25,32 +25,30 @@ namespace CaptureTypes {
         X(WaterfallWorldHomeRock000) \
         X(WaterfallWorldHomeBreakFence000) \
         X(WaterfallWorldBreakParts006) \
+        X(WaterfallWorldBreakParts003) \
+        X(WaterfallWorldHomeBreakBone000) \
+        X(WaterfallWorldHomeBone000) \
         X(WorldEndType__WaterfallWorld) \
         /* Sand */ \
         X(SandWorldHomeMeltIce000) \
-        X(SandWorldHomeIcePillar) \
         X(SandWorldHomeStonePillar001) \
         X(SandWorldHomeLift001) \
         X(SphinxQuiz) \
         X(CollectAnimal) \
         X(SandWorldCandlestand000) \
         X(WorldEndType__SandWorld) \
-        /* Lake */ \
-        X(LakeWorldHomeStonePillar002) \
-        X(LakeWorldHomeFloatingIsland000) \
-        X(Dokan) \
-        X(LakeWorldHomeTown002) \
-        X(LakeWorldHomeStonePillar000) \
-        X(LakeWorldHomeStonePillar008) \
-        X(WorldEndType__LakeWorld) \
         /* Forest */ \
         X(ForestWorldHomeRock000) \
         X(ForestWorldHomeRiseParts001) \
         X(ForestWorldHomeFallParts000) \
-        X(ForestWorldHomeTree000) \
-        X(ForestWorldHomeKeyMoveParts000) \
-        X(Poetter) \
         X(WorldEndType__ForestWorld) \
+        /* Lake */ \
+        X(LakeWorldHomeStonePillar002) \
+        X(LakeWorldHomeFloatingIsland000) \
+        X(LakeWorldHomeTown002) \
+        X(LakeWorldHomeStonePillar000) \
+        X(LakeWorldHomeStonePillar008) \
+        X(WorldEndType__LakeWorld) \
         /* Cloud */ \
         X(CapAppearTargetStepC) \
         X(WorldEndType__CloudWorld) \
@@ -192,8 +190,8 @@ namespace CaptureTypes {
             Type::WorldEndType__CapWorld,
             Type::WorldEndType__WaterfallWorld,
             Type::WorldEndType__SandWorld,
-            Type::WorldEndType__LakeWorld,
             Type::WorldEndType__ForestWorld,
+            Type::WorldEndType__LakeWorld,
             Type::WorldEndType__CloudWorld,
             Type::WorldEndType__ClashWorld,
             Type::WorldEndType__CityWorld,
@@ -216,7 +214,7 @@ namespace CaptureTypes {
     static PropTypeRange getTypesForWorld(int worldIndex) {
         const PropTypeRange range{static_cast<Type>(static_cast<s32>(getTypeEndForWorld(worldIndex-1))+1), getTypeEndForWorld(worldIndex)};
         if (range.start == range.end) { // No object list for specified kingdom
-            return PropTypeRange{Type::SandWorldHomeMeltIce000, Type::WorldEndType__SandWorld}; // Just default to cap
+            return PropTypeRange{Type::SignBoardDanger, Type::WorldEndType__CapWorld}; // Just default to cap
         }
         return range;
     }
