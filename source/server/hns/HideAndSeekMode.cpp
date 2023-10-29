@@ -21,7 +21,7 @@
 
 #include "basis/seadNew.h"
 #include "server/hns/HideAndSeekConfigMenu.hpp"
-#include "actors/FlagActor.h"
+#include "actors/PropActor.h"
 
 HideAndSeekMode::HideAndSeekMode(const char* name) : GameModeBase(name) {}
 
@@ -259,11 +259,11 @@ const char* HideAndSeekMode::getCurrentPropName() {
     return propActor->getPropArchiveName();
 }
 
-FlagActor* HideAndSeekMode::getPropActor() {
+PropActor* HideAndSeekMode::getPropActor() {
     if (mInfo->mPropType == CaptureTypes::Type::Unknown) {
         return nullptr;
     }
-    return FlagActor::props[static_cast<u32>(mInfo->mPropType) - static_cast<u32>(CaptureTypes::getTypesForCurrentWorld().start)];
+    return PropActor::props[static_cast<u32>(mInfo->mPropType) - static_cast<u32>(CaptureTypes::getTypesForCurrentWorld().start)];
 }
 
 void HideAndSeekMode::enablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {

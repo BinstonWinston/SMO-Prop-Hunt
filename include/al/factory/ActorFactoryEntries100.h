@@ -4,7 +4,7 @@
 
 #include "actors/PuppetActor.h"
 #include "actors/PuppetHackActor.h"
-#include "actors/FlagActor.h"
+#include "actors/PropActor.h"
 
 namespace al
 {
@@ -70,7 +70,7 @@ namespace al
 
 __attribute((used)) static al::NameToCreator<al::createActor> actorEntries[] = {
     // CUSTOM ACTOR ENTRIES HERE
-    {"FlagActor", &al::createCustomActor<FlagActor>},
+    {"PropActor", &al::createCustomActor<PropActor>},
     {"PuppetActor", &al::createCustomActor<PuppetActor>},
     {"PuppetHackActor", &al::createCustomActor<PuppetHackActor>},
     // VANILLA ACTOR ENTRIES

@@ -6,7 +6,7 @@
 #include "logger.hpp"
 #include "packets/Packet.h"
 #include "server/hns/HideAndSeekMode.hpp"
-#include "actors/FlagActor.h"
+#include "actors/PropActor.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(Client)
 

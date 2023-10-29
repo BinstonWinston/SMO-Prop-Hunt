@@ -27,19 +27,19 @@
 #include "algorithms/CaptureTypes.h"
 
 
-struct FlagInfo {
+struct PropInfo {
     // Flag transform
     sead::Vector3f pos = sead::Vector3f(0.f,0.f,0.f);
     sead::Quatf rot = sead::Quatf(0.f,0.f,0.f,0.f);
 };
 
-class FlagActor : public al::LiveActor {
+class PropActor : public al::LiveActor {
     public:
-        static FlagActor* props[CaptureTypes::MAX_PROPS_PER_KINGDOM];
-        static FlagActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
+        static PropActor* props[CaptureTypes::MAX_PROPS_PER_KINGDOM];
+        static PropActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);
 
-        FlagActor(const char* name);
+        PropActor(const char* name);
         virtual void init(al::ActorInitInfo const &) override;
         virtual void initAfterPlacement(void) override;
         virtual void control(void) override;
@@ -65,6 +65,6 @@ class FlagActor : public al::LiveActor {
         void changeModel(const char* newModel);
         void syncPose();
         
-        FlagInfo m_info{};
+        PropInfo m_info{};
         const char* mArchiveName = nullptr;
 };

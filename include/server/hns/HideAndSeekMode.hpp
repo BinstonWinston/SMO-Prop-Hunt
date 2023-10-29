@@ -7,7 +7,7 @@
 #include "server/gamemode/GameModeConfigMenu.hpp"
 #include "server/gamemode/GameModeTimer.hpp"
 #include "server/hns/HideAndSeekConfigMenu.hpp"
-#include "actors/FlagActor.h"
+#include "actors/PropActor.h"
 
 struct HideAndSeekInfo : GameModeInfoBase {
     HideAndSeekInfo() { mMode = GameMode::HIDEANDSEEK; }
@@ -47,7 +47,7 @@ class HideAndSeekMode : public GameModeBase {
         HideAndSeekInfo* mInfo = nullptr;
         al::CameraTicket *mTicket = nullptr;
 
-        FlagActor* getPropActor();
+        PropActor* getPropActor();
         bool isPropActive() { return mInfo->mPropType != CaptureTypes::Type::Unknown; }
         void enablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
         void disablePropMode(PlayerActorBase* playerBase, bool isYukimaru);

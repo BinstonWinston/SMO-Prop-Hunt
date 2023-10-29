@@ -8,24 +8,24 @@
 #include "al/util/LiveActorUtil.h"
 #include "algorithms/CaptureTypes.h"
 #include "logger.hpp"
-#include "actors/FlagActor.h"
+#include "actors/PropActor.h"
 #include "math/seadQuat.h"
 #include "math/seadVector.h"
 #include "server/gamemode/GameModeBase.hpp"
 #include "random/seadRandom.h"
 #include "time/seadTickTime.h"
 
-FlagActor* FlagActor::props[CaptureTypes::MAX_PROPS_PER_KINGDOM] = {nullptr};
+PropActor* PropActor::props[CaptureTypes::MAX_PROPS_PER_KINGDOM] = {nullptr};
 
-FlagActor::FlagActor(const char* name) : al::LiveActor(name) {
+PropActor::PropActor(const char* name) : al::LiveActor(name) {
     kill();
 }
 
-void FlagActor::initProp(const char* archiveName) {
+void PropActor::initProp(const char* archiveName) {
     mArchiveName = archiveName;
 }
 
-void FlagActor::init(al::ActorInitInfo const &initInfo) {
+void PropActor::init(al::ActorInitInfo const &initInfo) {
 
     auto* normalModel = this;
     al::initActorWithArchiveName(this, initInfo, /*"FireHydrant"*/mArchiveName, nullptr);
@@ -53,15 +53,15 @@ void FlagActor::init(al::ActorInitInfo const &initInfo) {
     makeActorDead();
 }
 
-void FlagActor::initAfterPlacement() { 
+void PropActor::initAfterPlacement() { 
     al::LiveActor::initAfterPlacement(); 
 }
 
-void FlagActor::movement() {
+void PropActor::movement() {
     al::LiveActor::movement();
 }
 
-void FlagActor::control() {
+void PropActor::control() {
 
     al::LiveActor* curModel = getCurrentModel();
 
@@ -76,13 +76,13 @@ void FlagActor::control() {
     syncPose();
 }
 
-void FlagActor::makeActorAlive() {
+void PropActor::makeActorAlive() {
     if (al::isDead(this)) {
         al::LiveActor::makeActorAlive();
     }
 }
 
-void FlagActor::makeActorDead() {
+void PropActor::makeActorDead() {
 
     al::LiveActor *curModel = getCurrentModel();
     
@@ -95,42 +95,42 @@ void FlagActor::makeActorDead() {
     }
 }
 
-al::LiveActor* FlagActor::getCurrentModel() {
+al::LiveActor* PropActor::getCurrentModel() {
     return this;
 }
 
 
-void FlagActor::syncPose() {
+void PropActor::syncPose() {
     al::LiveActor* curModel = getCurrentModel();
     curModel->mPoseKeeper->updatePoseQuat(al::getQuat(this)); // update pose using a quaternion instead of setting quaternion rotation
     al::setTrans(curModel, al::getTrans(this));
 }
 
 
-FlagActor *FlagActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName) {
+PropActor *PropActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName) {
     al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
     actorInitInfo.initViewIdSelf(&rootPlacementInfo, rootInitInfo);
 
-    al::createActor createActor = actorInitInfo.mActorFactory->getCreator("FlagActor");
+    al::createActor createActor = actorInitInfo.mActorFactory->getCreator("PropActor");
     
     if(!createActor) {
         return nullptr;
     }
 
-    FlagActor *newActor = (FlagActor*)createActor("FlagActor");
+    PropActor *newActor = (PropActor*)createActor("PropActor");
 
     Logger::log("Creating Prop Actor: %s\n", propArchiveName);
 
     newActor->initProp(propArchiveName);
     newActor->init(actorInitInfo);
 
-    return reinterpret_cast<FlagActor*>(newActor);
+    return reinterpret_cast<PropActor*>(newActor);
 }
 
-void FlagActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
+void PropActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
     const auto range = CaptureTypes::getTypesForCurrentWorld();
     for (int32_t i = 0; i < range.size(); i++) {
         const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));
-        FlagActor::props[i] = FlagActor::createFromFactory(rootInfo, placement, propArchiveName);
+        PropActor::props[i] = PropActor::createFromFactory(rootInfo, placement, propArchiveName);
     }
 }
