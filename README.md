@@ -4,6 +4,9 @@
   
 Huge thanks to CraftyBoss, Sanae, and all the other folks who made SMO online! This mod uses that code as a base and replaces capture sync with prop sync and adds a bit of additional logic on the client for props. 
 
+### Additional romfs files
+Please download the mod [here](https://gamebanana.com/mods/476551) for additional required larger romfs files.
+
 ### :warning: Note
 This mod uses SMO online as a base and includes that code in this mod package. If you want to play this mod, please remove any other copies of SMO online as it will conflict.
 
