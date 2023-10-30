@@ -9,7 +9,7 @@ BUILDVERSTR ?= 1.0.1
 IP ?= 10.0.0.221 # ftp server ip (usually is switch's local IP)
 DEBUGLOG ?= 0 # defaults to disable debug logger 
 SERVERIP ?= 0.0.0.0 # put debug logger server IP here
-ISEMU ?= 1 # set to 1 to compile for emulators
+ISEMU ?= 0 # set to 1 to compile for emulators
 
 PROJNAME ?= StarlightBase
 
