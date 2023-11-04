@@ -160,19 +160,19 @@ void PuppetActor::control() {
 
         // Capture Updating
 
-        if (mInfo->isCaptured && !mIsCaptureModel) {
+        if (mInfo->isCaptured && mInfo->curHack && mCaptureModelType != CaptureTypes::FindType(mInfo->curHack)) {
 
             getCurrentModel()->makeActorDead();  // sets previous model to dead so we can try to
                                                  // switch to capture model
             setCapture(mInfo->curHack);
-            mIsCaptureModel =  true;
+            mCaptureModelType = CaptureTypes::FindType(mInfo->curHack);
             getCurrentModel()->makeActorAlive(); // make new model alive
 
-        } else if (!mInfo->isCaptured && mIsCaptureModel) {
+        } else if (!mInfo->isCaptured && mCaptureModelType != CaptureTypes::Type::Unknown) {
 
             getCurrentModel()->makeActorDead(); // make capture model dead
             mModelHolder->changeModel("Normal"); // set player model to normal
-            mIsCaptureModel = false;
+            mCaptureModelType = CaptureTypes::Type::Unknown;
             getCurrentModel()->makeActorAlive(); // make player model alive
 
         }
@@ -362,7 +362,7 @@ void PuppetActor::changeModel(const char* newModel) {
 }
 
 al::LiveActor* PuppetActor::getCurrentModel() {
-    if (mIsCaptureModel) {
+    if (mCaptureModelType != CaptureTypes::Type::Unknown) {
         al::LiveActor* curCapture = mCaptures->getCurrentActor();
         if (curCapture) {
             return curCapture;

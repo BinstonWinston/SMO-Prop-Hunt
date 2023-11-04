@@ -239,6 +239,12 @@ void HideAndSeekMode::update() {
         propId += static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
         mInfo->mPropType = static_cast<CaptureTypes::Type>(propId);
         enablePropMode(playerBase, isYukimaru);
+        // Standard capture sync assumes you can only switch
+        // capture types by first going uncaptured (which is 100% true for captures)
+        // For props, we can switch without going uncaptured first
+        // so we need to clear the flag that checks if the packet has been sent
+        // so a new updated packet will be sent
+        Client::resetIsSentCaptureInf();
     }
 
     // Sync prop state with hiding/seeking state

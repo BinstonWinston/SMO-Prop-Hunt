@@ -89,7 +89,8 @@ class PuppetActor : public al::LiveActor {
 
         bool mIs2DModel = false;
 
-        bool mIsCaptureModel = false;
+        // Unknown means uncaptured
+        CaptureTypes::Type mCaptureModelType = CaptureTypes::Type::Unknown;
 
         float mClosingSpeed = 0;
 };

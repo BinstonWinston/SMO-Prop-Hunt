@@ -89,6 +89,10 @@ class Client {
         bool startThread();
         void readFunc();
 
+        static void resetIsSentCaptureInf() {
+            sInstance->isSentCaptureInf = false;
+        }
+
         static bool isSocketActive() { return sInstance ? sInstance->mSocket->isConnected() : false; };
         bool isPlayerConnected(int index) { return mPuppetInfoArr[index]->isConnected; }
         static bool isNeedUpdateShines();
