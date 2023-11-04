@@ -21,6 +21,7 @@ struct HideAndSeekInfo : GameModeInfoBase {
 class HideAndSeekMode : public GameModeBase {
     public:
         static const char* getCurrentPropName();
+        static void clearCurrentPropAndBecomeSeeker();
 
         HideAndSeekMode(const char* name);
 

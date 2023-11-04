@@ -324,3 +324,17 @@ void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
     // Set this every frame in case player goes in a capture or dies that would cause the player to re-appear
     player->mModelChanger->hideModel();
 }
+
+void HideAndSeekMode::clearCurrentPropAndBecomeSeeker() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return;
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+    if (!hsMode || !hsMode->mInfo) {
+        return;
+    }
+
+    hsMode->mInfo->mIsPlayerIt = true;
+    hsMode->mInfo->mPropType = CaptureTypes::Type::Unknown;
+}

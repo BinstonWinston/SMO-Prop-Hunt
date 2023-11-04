@@ -299,7 +299,12 @@ void sendShinePacket(GameDataHolderAccessor thisPtr, Shine* curShine) {
 
 void stageInitHook(al::ActorInitInfo *info, StageScene *curScene, al::PlacementInfo const *placement, al::LayoutInitInfo const *lytInfo, al::ActorFactory const *factory, al::SceneMsgCtrl *sceneMsgCtrl, al::GameDataHolderBase *dataHolder) {
     {
-        CaptureTypes::currentWorldId = GameDataFunction::getCurrentWorldId(curScene->mHolder);
+        auto const newWorldId = GameDataFunction::getCurrentWorldId(curScene->mHolder);
+        if (CaptureTypes::currentWorldId != newWorldId) {
+            // When changing kingdoms, reset prop and mode to prevent crash that occurs when a stale prop is active from previous kingdom
+            HideAndSeekMode::clearCurrentPropAndBecomeSeeker();
+        }
+        CaptureTypes::currentWorldId = newWorldId;
     }
     
     
