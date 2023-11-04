@@ -276,6 +276,18 @@ const char* HideAndSeekMode::getCurrentPropName() {
     return propActor->getPropArchiveName();
 }
 
+CaptureTypes::Type HideAndSeekMode::getCurrentPropType() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return CaptureTypes::Type::Unknown;
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+    if (!hsMode || !hsMode->mInfo) {
+        return CaptureTypes::Type::Unknown;
+    }
+    return hsMode->mInfo->mPropType;
+}
+
 PropActor* HideAndSeekMode::getPropActor() {
     if (mInfo->mPropType == CaptureTypes::Type::Unknown) {
         return nullptr;

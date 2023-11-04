@@ -22,5 +22,5 @@ class PuppetHackActor : public al::LiveActor {
         
     private:
         PuppetInfo *mInfo;
-        sead::FixedSafeString<0x20> mHackType;
+        sead::FixedSafeString<PROP_ACTOR_NAME_MAX_LENGTH> mHackType;
 };

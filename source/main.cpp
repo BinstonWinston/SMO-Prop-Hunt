@@ -433,18 +433,9 @@ bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
                     debugPuppet->playerPos = al::getTrans(playerBase);
                     al::calcQuat(&debugPuppet->playerRot, playerBase);
 
-                    PlayerHackKeeper* hackKeeper = playerBase->getPlayerHackKeeper();
-
-                    if (hackKeeper) {
-                        const char *hackName = hackKeeper->getCurrentHackName();
-                        debugPuppet->isCaptured = hackName != nullptr;
-                        if (debugPuppet->isCaptured) {
-                            strcpy(debugPuppet->curHack, hackName);
-                        } else {
-                            strcpy(debugPuppet->curHack, "");
-                        }
-                    }
-                    
+                    const auto propType = HideAndSeekMode::getCurrentPropType();
+                    debugPuppet->isCaptured = propType != CaptureTypes::Type::Unknown;
+                    debugPuppet->curHack = propType;                 
                 }
             }
         }

@@ -128,9 +128,18 @@ namespace CaptureTypes {
         #undef X
     };
 
+    static_assert(static_cast<uint64_t>(Type::End) <= std::numeric_limits<unsigned char>::max(),
+                    "Prop list exceeds maximum allowed in current implementation");
+                    // Because I pack prop type into the first char of the capture hackName packet string
+
     static constexpr size_t ToValue(Type type) { return static_cast<std::uint16_t>(type); }
 
-    static constexpr Type ToType(std::uint16_t value) {return static_cast<Type>(value);}
+    static constexpr Type ToType(std::uint16_t value) {
+        if (value > static_cast<uint64_t>(Type::End)) {
+            return Type::Unknown;
+        }
+        return static_cast<Type>(value);
+    }
 
     static constexpr std::array<const char*, ToValue(Type::End)+1> s_Strs {
         #define X(name) #name,

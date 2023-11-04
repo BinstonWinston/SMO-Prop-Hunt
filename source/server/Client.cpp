@@ -670,14 +670,16 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
     if (sInstance->isClientCaptured && !sInstance->isSentCaptureInf) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
-        strcpy(packet->hackName, tryConvertName(HideAndSeekMode::getCurrentPropName()));
+        packet->hackName[0] = CaptureTypes::ToValue(HideAndSeekMode::getCurrentPropType());
+        packet->hackName[1] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = true;
     } else if (!sInstance->isClientCaptured && sInstance->isSentCaptureInf) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
-        strcpy(packet->hackName, "");
+        packet->hackName[0] = CaptureTypes::ToValue(CaptureTypes::Type::Unknown);
+        packet->hackName[1] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = false;
@@ -827,11 +829,8 @@ void Client::updateCaptureInfo(CaptureInf* packet) {
         return;
     }
 
-    curInfo->isCaptured = strlen(packet->hackName) > 0;
-
-    if (curInfo->isCaptured) {
-        strcpy(curInfo->curHack, packet->hackName);
-    }
+    curInfo->curHack = CaptureTypes::ToType(packet->hackName[0]);
+    curInfo->isCaptured = (curInfo->curHack != CaptureTypes::Type::Unknown);
 }
 
 /**

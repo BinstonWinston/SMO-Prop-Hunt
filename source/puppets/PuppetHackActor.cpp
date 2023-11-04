@@ -92,14 +92,10 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
 
             const char* hackName = tryConvertName(propArchiveName);
 
-            // make sure we only make as many unique puppet hack actors as needed
-            if(!curPuppet->isInCaptureList(hackName)) {
-
-                PuppetHackActor* dupliActor = createPuppetHackActorFromFactory(
-                    initInfo, &placement, curPuppet->getInfo(), hackName);
-                if (dupliActor) {
-                    curPuppet->addCapture(dupliActor, hackName);
-                }
+            PuppetHackActor* dupliActor = createPuppetHackActorFromFactory(
+                initInfo, &placement, curPuppet->getInfo(), hackName);
+            if (dupliActor) {
+                curPuppet->addCapture(dupliActor, hackName);
             }
         }
     }
@@ -108,12 +104,9 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
 
     if (debugPuppet) {
         const char* hackName = tryConvertName(propArchiveName);
-        if(!debugPuppet->isInCaptureList(hackName)) {
-
-            PuppetHackActor *dupliActor = createPuppetHackActorFromFactory(initInfo, &placement, debugPuppet->getInfo(), hackName);
-            if (dupliActor) {
-                debugPuppet->addCapture(dupliActor, hackName);
-            }
+        PuppetHackActor *dupliActor = createPuppetHackActorFromFactory(initInfo, &placement, debugPuppet->getInfo(), hackName);
+        if (dupliActor) {
+            debugPuppet->addCapture(dupliActor, hackName);
         }
     }
 }

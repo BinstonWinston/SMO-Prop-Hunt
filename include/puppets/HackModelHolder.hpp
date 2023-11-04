@@ -9,7 +9,7 @@
 
 struct CaptureEntry {
     PuppetHackActor *actor;
-    char className[0x16];
+    char className[PROP_ACTOR_NAME_MAX_LENGTH];
 };
 
 class HackModelHolder {

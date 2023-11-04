@@ -1,6 +1,8 @@
+
 #pragma once
 
 #include "algorithms/PlayerAnims.h"
+#include "algorithms/CaptureTypes.h"
 #include "packets/Packet.h"
 
 #include "al/LiveActor/LiveActor.h"
@@ -9,6 +11,8 @@
 
 #include "sead/math/seadVector.h"
 #include "sead/math/seadQuat.h"
+
+constexpr size_t PROP_ACTOR_NAME_MAX_LENGTH = 0x40;
 
 struct PuppetInfo {
     // General Puppet Info
@@ -26,7 +30,7 @@ struct PuppetInfo {
     char costumeBody[0x20] = {};
     char costumeHead[0x20] = {};
     // Puppet Capture Info
-    char curHack[0x40] = {};
+    CaptureTypes::Type curHack = CaptureTypes::Type::Unknown;
     bool isCaptured = false;
     bool isStartCapture = false;
     // Puppet Model Info
