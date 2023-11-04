@@ -11,6 +11,6 @@
 * Re-bind Dpad-right controls to another button since it conflicts with hider time controls
   *  Updated hold in air and prop cycling to different buttons (see readme)
 * Cascade and seaside kingdom have props that aren't visible to other players
-  * Fix:
+  * Fix: `7883012`
   * Cause: CaptureEntry.className in HackModelHolder.hpp had a string size of 0x16, which wasn't long enough to include some longer prop names
   * Fix info: Updated all client-side prop string names to have a length of 0x40 to be safe, and updated the CaptureInf packet logic to just pack the Capture type enum into the first byte/char of the hackName string (so no server logic needs to be updated to handle longer strings)
