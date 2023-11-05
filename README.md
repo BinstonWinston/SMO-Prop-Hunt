@@ -14,8 +14,8 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 
 ### Controls (same as SMO online with these additions)
 * Randomize Prop (switch between hider and seeker)
-* Rotate thru Props (hold ZL + press ZR)
-* Freeze in mid-air (hold L + press R), useful for getting the exact positioning for a prop to blend in
+* Rotate thru Props (hold R + press left stick)
+* Freeze in mid-air (hold L + press left stick), useful for getting the exact positioning for a prop to blend in
 
 ### :warning: Known Issues
 * Switching kingdoms while a prop is active crashes the game. For now, please turn off props when switching kingdoms (either go into seeker mode or turn off the Hide&Seek game mode) 

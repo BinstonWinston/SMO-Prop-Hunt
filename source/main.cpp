@@ -395,7 +395,7 @@ bool hakoniwaSequenceHook(HakoniwaSequence* sequence) {
         holdPositionInAir(playerBase);
     }
 
-    if (al::isPadHoldL(-1) && al::isPadTriggerR(-1)) {
+    if (al::isPadHoldL(-1) && al::isPadTriggerPressLeftStick(-1)) {
         isHoldPositionInAir = !isHoldPositionInAir;
     }
 

@@ -37,4 +37,10 @@ namespace al {
 
     sead::Vector2f *getLeftStick(int);
     sead::Vector2f *getRightStick(int);
+
+    bool isPadTriggerPressLeftStick(int port);
+	bool isPadTriggerPressRightStick(int port);
+
+	bool isPadHoldPressLeftStick(int port);
+	bool isPadHoldPressRightStick(int port);
 }
