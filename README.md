@@ -14,6 +14,15 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Rotate thru Props (hold R + press left stick)
 * Freeze in mid-air (hold L + press left stick), useful for getting the exact positioning for a prop to blend in
 
+### Rules
+* Standard Hide&Seek Rules
+* No hiding or running away in Captures as they do not sync on the prop hunt build (using a capture to get to a place with your prop is okay)
+* Be reasonable, don't pick a small prop and just hide in a tiny crevice, try to blend in with normal stage design. If people aren't finding you after too long, try moving around, switching props, or giving more detailed hints, have fun with it!
+* Mid-air freezing is only allowed to line up props to make them look realistic, no using it to hide at a hard-to-reach spot high in the air or to gain infinite height
+* Choose one of
+    * Random props at the start of the round, no switching props, you get what you get
+    * Hiders can choose their prop and cycle thru while escaping (e.g. run around a corner and turn into a different nearby object)
+
 ### :warning: Known Issues
 * Sometimes props take a sec to appear locally, try moving around or switching between hider and seeker
 
