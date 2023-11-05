@@ -4,9 +4,6 @@
   
 Huge thanks to CraftyBoss, Sanae, and all the other folks who made SMO online! This mod uses that code as a base and replaces capture sync with prop sync and adds a bit of additional logic on the client for props. 
 
-### Additional romfs files
-Please download the mod [here](https://gamebanana.com/mods/476551) for additional required larger romfs files.
-
 ### :warning: Note
 This mod uses SMO online as a base and includes that code in this mod package. If you want to play this mod, please remove any other copies of SMO online as it will conflict.
 
@@ -18,7 +15,12 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Freeze in mid-air (hold L + press left stick), useful for getting the exact positioning for a prop to blend in
 
 ### :warning: Known Issues
-* Sometimes props take a sec to appear, try moving around or switching between hider and seeker
+* Sometimes props take a sec to appear locally, try moving around or switching between hider and seeker
+
+## Best Kingdoms
+* Metro
+* Cap
+* Cascade
 
 ### Kingdoms Supported
 * Cap
