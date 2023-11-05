@@ -671,6 +671,9 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
         packet->hackName[0] = CaptureTypes::ToValue(HideAndSeekMode::getCurrentPropType());
+        if (packet->hackName[0] >= '\0') {
+            packet->hackName[0]++;
+        }
         packet->hackName[1] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
@@ -679,6 +682,9 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
         packet->hackName[0] = CaptureTypes::ToValue(CaptureTypes::Type::Unknown);
+        if (packet->hackName[0] >= '\0') {
+            packet->hackName[0]++;
+        }
         packet->hackName[1] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
@@ -829,7 +835,11 @@ void Client::updateCaptureInfo(CaptureInf* packet) {
         return;
     }
 
-    curInfo->curHack = CaptureTypes::ToType(packet->hackName[0]);
+    auto value = packet->hackName[0];
+    if (value > '\0') {
+        value--;
+    }
+    curInfo->curHack = CaptureTypes::ToType(value);
     curInfo->isCaptured = (curInfo->curHack != CaptureTypes::Type::Unknown);
 }
 

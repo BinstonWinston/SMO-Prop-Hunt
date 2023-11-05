@@ -128,7 +128,7 @@ namespace CaptureTypes {
         #undef X
     };
 
-    static_assert(static_cast<uint64_t>(Type::End) <= std::numeric_limits<unsigned char>::max(),
+    static_assert(static_cast<uint64_t>(Type::End) + 1 /*+1 because we skip using null terminator in encoding*/ <= std::numeric_limits<unsigned char>::max(),
                     "Prop list exceeds maximum allowed in current implementation");
                     // Because I pack prop type into the first char of the capture hackName packet string
 
