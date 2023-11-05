@@ -11,7 +11,7 @@ inputs:
     required    : false
     default     : ''
   emu:
-    description : 'what system the build is for: Switch or Emulators'
+    description : 'what system the build is for: Switch, Ryujinx or yuzu'
     required    : false
     default     : 'Switch'
 
@@ -62,9 +62,9 @@ runs:
       ;
       cp  -r  ./romfs/  ./starlight_patch_100/atmosphere/contents/0100000000010000/.
   -
-    name  : Emulators
+    name  : Yuzu
     shell : bash
-    if    : ${{ inputs.emu == 'Emulators' }}
+    if    : ${{ inputs.emu == 'yuzu' }}
     run: |
       cd  ./starlight_patch_100/
       mkdir  ./SMOO/
