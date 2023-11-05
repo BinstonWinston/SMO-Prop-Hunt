@@ -122,7 +122,7 @@ namespace CaptureTypes {
 
     enum class Type: s16
     {
-        Unknown = -1,
+        Unknown,
         #define X(name) name,
         PROP_OBJECT_LIST
         #undef X
@@ -142,6 +142,7 @@ namespace CaptureTypes {
     }
 
     static constexpr std::array<const char*, ToValue(Type::End)+1> s_Strs {
+        "Unknown",
         #define X(name) #name,
         PROP_OBJECT_LIST
         #undef X

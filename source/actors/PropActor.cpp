@@ -27,7 +27,6 @@ void PropActor::initProp(const char* archiveName) {
 
 void PropActor::init(al::ActorInitInfo const &initInfo) {
 
-    auto* normalModel = this;
     al::initActorWithArchiveName(this, initInfo, mArchiveName, nullptr);
 
     al::initActorPoseTQSV(this);
@@ -48,9 +47,9 @@ void PropActor::init(al::ActorInitInfo const &initInfo) {
 
     al::invalidateHitSensors(this);
 
-    al::setClippingInfo(this, 50000.0f, 0);
-    al::setClippingNearDistance(this, 50000.0f);
-    al::validateClipping(this);
+    al::invalidateClipping(this);
+
+    al::invalidateOcclusionQuery(this);
 
     al::offCollide(this);
 

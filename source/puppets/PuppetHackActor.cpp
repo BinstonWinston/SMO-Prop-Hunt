@@ -34,6 +34,8 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
 
     al::invalidateClipping(this);
 
+    al::invalidateOcclusionQuery(this);
+
     al::offCollide(this);
 
     makeActorDead();

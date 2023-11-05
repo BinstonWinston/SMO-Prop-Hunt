@@ -15,6 +15,7 @@
 typedef unsigned int uint;
 
 namespace al {
+    void invalidateOcclusionQuery(al::LiveActor* actor);
 
     void tryInitFixedModelGpuBuffer(const LiveActor*);
     void offUpdateMovementEffectAudioCollisionSensor(const LiveActor*);
