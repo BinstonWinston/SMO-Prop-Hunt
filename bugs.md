@@ -1,6 +1,3 @@
-## Bugs
-* Other players' props not visible except when looking at odyssey? Unclear on repro
-
 ## Fixed/Done
 * Props not syncing on other clients when cycling thru props
   * Fix: `e2b1e99`
@@ -14,3 +11,6 @@
   * Fix: `7883012`
   * Cause: CaptureEntry.className in HackModelHolder.hpp had a string size of 0x16, which wasn't long enough to include some longer prop names
   * Fix info: Updated all client-side prop string names to have a length of 0x40 to be safe, and updated the CaptureInf packet logic to just pack the Capture type enum into the first byte/char of the hackName string (so no server logic needs to be updated to handle longer strings)
+* Prop visibility issues in some cases (mostly for your own prop when looking at different angles)
+  * Fix: `899bddd`
+  * Fix info: added al::invalidateOcclusionQuery to PropActor and PuppetHackActor initialization
