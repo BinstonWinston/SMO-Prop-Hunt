@@ -31,8 +31,9 @@ runs:
     shell : bash
     run: |
       VERS=${{ inputs.tag }}
+      GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
       echo "version=${VERS:1}" >>$GITHUB_OUTPUT
-      echo "filename=${{ inputs.prefix }}SMO_Online${{ (inputs.tag != '' && format('_{0}', inputs.tag)) || '' }}_for_${{ inputs.emu }}" >>$GITHUB_OUTPUT
+      echo "filename=${{ inputs.prefix }}PropHunt_SMO_Online${{ (inputs.tag != '' && format('_{0}', inputs.tag)) || '' }}_for_${{ inputs.emu }}_$GIT_HASH" >>$GITHUB_OUTPUT
   -
     name : Set up Docker Buildx
     uses : docker/setup-buildx-action@v2
