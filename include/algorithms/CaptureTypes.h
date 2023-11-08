@@ -37,7 +37,7 @@ namespace CaptureTypes {
         X(CollectAnimal) \
         X(SandWorldCandlestand000) \
         X(WorldEndType__SandWorld) \
-        /* Forest */ \
+        /* Forest TODO */ \
         X(ForestWorldHomeRock000) \
         X(ForestWorldHomeRiseParts001) \
         X(ForestWorldHomeFallParts000) \
@@ -52,7 +52,7 @@ namespace CaptureTypes {
         /* Cloud */ \
         X(CapAppearTargetStepC) \
         X(WorldEndType__CloudWorld) \
-        /* Clash */ \
+        /* Clash TODO */ \
         X(ClashWorldHomeTree000) \
         X(CageBreakable) \
         X(ClashWorldBreakParts000) \
@@ -72,14 +72,14 @@ namespace CaptureTypes {
         X(CityWorldHomeTree000) \
         X(CityWorldHomeSignal000) \
         X(WorldEndType__CityWorld) \
-        /* Sea */ \
+        /* Sea TODO */ \
         X(SeaWorldHomeGatePillar000) \
         X(SeaWorldHomeWaveSurfParts000) \
         X(SeaWorldHomeGlassWaveSurfParts) \
         X(SeaWorldHomePillar002) \
         X(VolleyballNet) \
         X(WorldEndType__SeaWorld) \
-        /* Snow */ \
+        /* Snow TODO */ \
         X(SnowWorldHomeWindBlowParts000) \
         X(SnowWorldHomeWindBlowParts001) \
         X(SnowMan) \
@@ -89,7 +89,12 @@ namespace CaptureTypes {
         /* Lava */ \
         X(LavaWorldWireStep000) \
         X(LavaWorldHomeRock000) \
-        X(LavaWorldHomeGroundParts002) \
+        X(LavaWorldHomeWheelParts000) \
+        X(HackFork) \
+        X(LavaWorldCandlestand000) \
+        X(RadishGold) \
+        X(SaucePan) \
+        X(LavaWorldHomeTable000) \
         X(WorldEndType__LavaWorld) \
         /* BossRaidWorld (Ruined) */ \
         X(WorldEndType__BossRaidWorld) \
@@ -101,7 +106,7 @@ namespace CaptureTypes {
         X(SkyWorldHomeStep000) \
         X(SkyWorldHomeStep002) \
         X(WorldEndType__SkyWorld) \
-        /* Moon */ \
+        /* Moon TODO */ \
         X(MoonRock) \
         X(MoonWorldTableB) \
         X(MoonWorldCaptureParadeFence000) \
