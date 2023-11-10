@@ -42,8 +42,13 @@ class HideAndSeekMode : public GameModeBase {
 
         void setCameraTicket(al::CameraTicket *ticket) {mTicket = ticket;}
 
+        // returns empty optional if no cooldown is active, otherwise returns the
+        // cooldown percentage remaining
+        std::optional<f32> getPropCooldown();
+
     private:
         float mInvulnTime = 0.0f;
+        f32 mPropSwitchCooldownTime = 0.0f;
         GameModeTimer* mModeTimer = nullptr;
         HideAndSeekIcon *mModeLayout = nullptr;
         HideAndSeekInfo* mInfo = nullptr;

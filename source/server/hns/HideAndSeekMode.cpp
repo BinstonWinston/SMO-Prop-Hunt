@@ -23,6 +23,8 @@
 #include "server/hns/HideAndSeekConfigMenu.hpp"
 #include "actors/PropActor.h"
 
+static constexpr f32 PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS = 5;
+
 HideAndSeekMode::HideAndSeekMode(const char* name) : GameModeBase(name) {}
 
 void HideAndSeekMode::init(const GameModeInitInfo& info) {
@@ -74,6 +76,7 @@ void HideAndSeekMode::begin() {
     al::SimpleLayoutAppearWaitEnd* playGuideLyt = mCurScene->mSceneLayout->mPlayGuideMenuLyt;
 
     mInvulnTime = 0;
+    mPropSwitchCooldownTime = 0;
 
     if(coinCounter->mIsAlive)
         coinCounter->tryEnd();
@@ -101,6 +104,7 @@ void HideAndSeekMode::end() {
     al::SimpleLayoutAppearWaitEnd* playGuideLyt = mCurScene->mSceneLayout->mPlayGuideMenuLyt;
 
     mInvulnTime = 0.0f;
+    mPropSwitchCooldownTime = 0;
 
     if(!coinCounter->mIsAlive)
         coinCounter->tryStart();
@@ -230,7 +234,9 @@ void HideAndSeekMode::update() {
         Client::sendTagInfPacket();
     }
 
-    if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown) {
+    mPropSwitchCooldownTime += Time::deltaTime;
+
+    if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown && !getPropCooldown().has_value()) {
         disablePropMode(playerBase, isYukimaru); // Hide current prop
         auto propId = static_cast<s32>(mInfo->mPropType) - static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
         propId = std::max(0, propId);
@@ -245,6 +251,7 @@ void HideAndSeekMode::update() {
         // so we need to clear the flag that checks if the packet has been sent
         // so a new updated packet will be sent
         Client::resetIsSentCaptureInf();
+        mPropSwitchCooldownTime = 0;
     }
 
     // Sync prop state with hiding/seeking state
@@ -349,4 +356,14 @@ void HideAndSeekMode::clearCurrentPropAndBecomeSeeker() {
 
     hsMode->mInfo->mIsPlayerIt = true;
     hsMode->mInfo->mPropType = CaptureTypes::Type::Unknown;
+}
+
+std::optional<f32> HideAndSeekMode::getPropCooldown() {
+    if (mInfo->mPropType == CaptureTypes::Type::Unknown) {
+        return {};
+    }
+    if (mPropSwitchCooldownTime >= PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS) {
+        return {};
+    }
+    return mPropSwitchCooldownTime / PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS;
 }

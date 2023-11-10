@@ -51,13 +51,15 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 
 Props for each kingdom are defined in `include/algorithms/CaptureTypes.h`
 
-# Contributors (from SMO online base repo)
-- [Crafty](https://github.com/CraftyBoss)
-- [Sanae](https://github.com/sanae6) Wrote the majority of the server code
-- [Shadow](https://github.com/shadowninja108) original author of starlight, the tool used to make this entire mod possible
-- [GRAnimated](https://github.com/GRAnimated)
-
 # Credits
-- [OdysseyDecomp](https://github.com/shibbo/OdysseyDecomp)
-- [OdysseyReversed](https://github.com/shibbo/OdysseyReversed)
-- [open-ead](https://github.com/open-ead/sead) sead Headers
+- SMOOnline
+  - [Crafty](https://github.com/CraftyBoss)
+  - [Sanae](https://github.com/sanae6) Wrote the majority of the server code
+  - [Shadow](https://github.com/shadowninja108) original author of starlight, the tool used to make this entire mod possible
+  - [GRAnimated](https://github.com/GRAnimated)
+- Oxygen Timer Code
+  - [Amethyst-szs](https://github.com/Amethyst-szs) oxygen timer for prop cooldown adapted from time travel mod [here](https://github.com/Amethyst-szs/time-travel-standalone/blob/main/source/main.cpp#L215)
+- Additional
+  - [OdysseyDecomp](https://github.com/shibbo/OdysseyDecomp)
+  - [OdysseyReversed](https://github.com/shibbo/OdysseyReversed)
+  - [open-ead](https://github.com/open-ead/sead) sead Headers
