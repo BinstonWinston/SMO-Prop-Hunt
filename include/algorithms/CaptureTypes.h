@@ -36,28 +36,42 @@ namespace CaptureTypes {
         X(SphinxQuiz) \
         X(CollectAnimal) \
         X(SandWorldCandlestand000) \
+        X(ReactionObjectSandWorldParasol) \
+        X(ReactionObjectCactusA) \
+        X(SandWorldHomeBench000) \
+        X(SandWorldHomeTreePalm000) \
         X(WorldEndType__SandWorld) \
-        /* Forest TODO */ \
+        /* Forest */ \
         X(ForestWorldHomeRock000) \
         X(ForestWorldHomeRiseParts001) \
         X(ForestWorldHomeFallParts000) \
-        X(DigPoint) \
+        X(ForestWorldHomeTree002) \
+        X(ShopObject) \
+        X(ForestWorldHomeEnergyStand) \
+        X(PackunPoison) \
+        X(TreasureBoxWood) \
         X(WorldEndType__ForestWorld) \
         /* Lake */ \
         X(LakeWorldHomeStonePillar002) \
         X(LakeWorldHomeFloatingIsland000) \
-        X(LakeWorldHomeTown002) \
         X(LakeWorldHomeStonePillar000) \
         X(LakeWorldHomeStonePillar008) \
+        X(CapTrampoline) \
+        X(Dokan) \
         X(WorldEndType__LakeWorld) \
         /* Cloud */ \
         X(CapAppearTargetStepC) \
         X(WorldEndType__CloudWorld) \
-        /* Clash TODO */ \
+        /* Clash */ \
         X(ClashWorldHomeTree000) \
         X(CageBreakable) \
-        X(ClashWorldBreakParts000) \
+        X(ClashWorldHomeHipDropTransformParts000) \
         X(ClashWorldHomeTree003) \
+        X(CapCatapult) \
+        X(CatchBomb) \
+        X(KinopioMember) \
+        X(KinokoUfo) \
+        X(Jango) \
         X(WorldEndType__ClashWorld) \
         /* City */ \
         X(FireHydrant) \
@@ -112,7 +126,12 @@ namespace CaptureTypes {
         X(SkyWorldHomeStatue001) \
         X(SkyWorldHomeTimer000FixParts000) \
         X(SkyWorldHomeStep000) \
-        X(SkyWorldHomeStep002) \
+        X(SkyWorldHomeGate002) \
+        X(ElectricWireTargetEnd) \
+        X(Togezo) \
+        X(Donsuke) \
+        X(SkyWorldParasolA) \
+        X(SkyWorldFlagA) \
         X(WorldEndType__SkyWorld) \
         /* Moon TODO add more objects */ \
         X(MoonRock) \

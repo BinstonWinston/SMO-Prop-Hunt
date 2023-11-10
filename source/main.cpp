@@ -513,7 +513,7 @@ bool reduceOxygenForce()
 HOOK_ATTR
 void oxygenReduce(PlayerOxygen* thisPtr)
 {
-    float oxygenRingCalc;
+    float oxygenRingCalc = 0;
     
     //If the player is in water, perform usual calculation
     if(isPInWater){

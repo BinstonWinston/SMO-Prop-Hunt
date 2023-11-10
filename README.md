@@ -29,24 +29,20 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
   * Don't pick a small prop and just hide in a tiny crevice, try to blend in with normal stage design. If people aren't finding you after too long, try moving around, switching props, or giving more detailed hints
   * Mid-air freezing is only allowed to line up props to make them look realistic, no using it to hide at a hard-to-reach spot high in the air or to gain infinite height.
   * Don't clip your prop into a wall so only a tiny corner is visible. Some props are not centered around mario, don't use this to make your prop go out-of-bounds (a small piece of the base of a pillar or something is okay if needed to line up the prop with the ground, but make sure the majority of the prop is in-bounds)
+  * It can be difficult to tag someone since mario is invisible (collision is still based on mario's radius, since props are not always spherical). Don't overuse this as a hider and juke someone out too much, focus on a prop that is hard to find, not just hard to tag. (I'd like to improve prop collision in the future, but that's a large task)
 * There's a cooldown between switching props to make it more difficult for hiders to escape
 * Choose one of
     * Random props at the start of the round, no switching props, you get what you get
     * Hiders can choose their prop and cycle thru while escaping (e.g. run around a corner and turn into a different nearby object)
 
-## Best Kingdoms
-* Metro
-* Cap
-* Cascade
-
 ### Kingdoms Supported
 * Cap
 * Cascade
 * Sand
-* Wooded (limited prop set due to crashes, probably memory limit related)
+* Wooded
 * Lake
 * Lost
-* Metro (has the most props, so will probably be the best experience)
+* Metro
 * Snow
 * Seaside
 * Luncheon
@@ -56,8 +52,18 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 ### Partial Support (limited object set)
 * Moon
 
+### No prop support
+* Cloud
+* Ruined
+* Dark Side
+* Darker Side
+
 
 Props for each kingdom are defined in `include/algorithms/CaptureTypes.h`
+
+# Known Issues
+* Mid-air freeze causes you to rise slightly over the course of a couple minutes
+
 
 # Credits
 - SMOOnline
