@@ -41,6 +41,7 @@ namespace CaptureTypes {
         X(ForestWorldHomeRock000) \
         X(ForestWorldHomeRiseParts001) \
         X(ForestWorldHomeFallParts000) \
+        X(DigPoint) \
         X(WorldEndType__ForestWorld) \
         /* Lake */ \
         X(LakeWorldHomeStonePillar002) \
@@ -72,19 +73,25 @@ namespace CaptureTypes {
         X(CityWorldHomeTree000) \
         X(CityWorldHomeSignal000) \
         X(WorldEndType__CityWorld) \
-        /* Sea TODO */ \
+        /* Sea */ \
         X(SeaWorldHomeGatePillar000) \
         X(SeaWorldHomeWaveSurfParts000) \
         X(SeaWorldHomeGlassWaveSurfParts) \
         X(SeaWorldHomePillar002) \
         X(VolleyballNet) \
+        X(Shine) \
+        X(SeaWorldHomeBottle000) \
+        X(SeaWorldBush) \
+        X(SeaWorldParasol) \
         X(WorldEndType__SeaWorld) \
-        /* Snow TODO */ \
+        /* Snow */ \
         X(SnowWorldHomeWindBlowParts000) \
         X(SnowWorldHomeWindBlowParts001) \
         X(SnowMan) \
-        X(SnowWorldHomeIce000) \
         X(TreasureBox) \
+        X(SnowWorldHomeFloaterParts000) \
+        X(SnowWorldRaceFlag001) \
+        X(SnowWorldCloudBonusExGround001) \
         X(WorldEndType__SnowWorld) \
         /* Lava */ \
         X(LavaWorldWireStep000) \
@@ -95,6 +102,7 @@ namespace CaptureTypes {
         X(RadishGold) \
         X(SaucePan) \
         X(LavaWorldHomeTable000) \
+        X(ReactionObjectLavaWorldStalkTurnip) \
         X(WorldEndType__LavaWorld) \
         /* BossRaidWorld (Ruined) */ \
         X(WorldEndType__BossRaidWorld) \
@@ -106,7 +114,7 @@ namespace CaptureTypes {
         X(SkyWorldHomeStep000) \
         X(SkyWorldHomeStep002) \
         X(WorldEndType__SkyWorld) \
-        /* Moon TODO */ \
+        /* Moon TODO add more objects */ \
         X(MoonRock) \
         X(MoonWorldTableB) \
         X(MoonWorldCaptureParadeFence000) \
@@ -118,12 +126,16 @@ namespace CaptureTypes {
         X(PeachWorldHomeTree001) \
         X(PeachWorldHomeTower000) \
         X(PeachWorldHomeGarden) \
+        X(PeachWorldVase) \
+        X(PeachWorldCastleInsideChair) \
+        X(PeachWorldTrampolineMushroomA) \
+        X(PeachWorldFlagA) \
         X(WorldEndType__PeachWorld) \
         /* Special1 */ \
         X(WorldEndType__Special1World) \
         /* Special2 */ \
         X(WorldEndType__Special2World) \
-        X(End) \
+        X(End)
 
     enum class Type: s16
     {

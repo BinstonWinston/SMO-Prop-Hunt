@@ -41,10 +41,12 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Metro (has the most props, so will probably be the best experience)
 * Snow
 * Seaside
-* Luncheon (working but could use some more objects)
+* Luncheon
 * Bowser's
-* Moon
 * Mushroom  
+
+### Partial Support (limited object set)
+* Moon
 
 
 Props for each kingdom are defined in `include/algorithms/CaptureTypes.h`
