@@ -17,14 +17,22 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 ### Rules
 * Standard Hide&Seek Rules
 * No hiding or running away in Captures as they do not sync on the prop hunt build (using a capture to get to a place with your prop is okay)
-* Be reasonable, don't pick a small prop and just hide in a tiny crevice, try to blend in with normal stage design. If people aren't finding you after too long, try moving around, switching props, or giving more detailed hints, have fun with it!
-* Mid-air freezing is only allowed to line up props to make them look realistic, no using it to hide at a hard-to-reach spot high in the air or to gain infinite height
+* Hint Suggestions
+  * 3 mins - Subarea/No subarea
+  * 6 mins - Top/Bottom or Left/Right
+  * 9 mins - Vague prop description (e.g. "my prop is made of rock", ")
+  * 15 mins - Detailed prop description (e.g. "I'm a blue-ish rock pillar a few marios tall", "I'm a small green bush that is usually in X part of the kingdom")
+    * You're allowed to change props, but don't do it immediately after giving a hint to throw seekers off
+  * 20 mins - Hint art/screenshot of prop (with minimal background/hiding spot)
+  * 30 mins - Hint art of hiding spot
+* Be reasonable, have fun!
+  * Don't pick a small prop and just hide in a tiny crevice, try to blend in with normal stage design. If people aren't finding you after too long, try moving around, switching props, or giving more detailed hints
+  * Mid-air freezing is only allowed to line up props to make them look realistic, no using it to hide at a hard-to-reach spot high in the air or to gain infinite height.
+  * Don't clip your prop into a wall so only a tiny corner is visible. Some props are not centered around mario, don't use this to make your prop go out-of-bounds (a small piece of the base of a pillar or something is okay if needed to line up the prop with the ground, but make sure the majority of the prop is in-bounds)
+* There's a cooldown between switching props to make it more difficult for hiders to escape
 * Choose one of
     * Random props at the start of the round, no switching props, you get what you get
     * Hiders can choose their prop and cycle thru while escaping (e.g. run around a corner and turn into a different nearby object)
-
-### :warning: Known Issues
-* Sometimes props take a sec to appear locally, try moving around or switching between hider and seeker
 
 ## Best Kingdoms
 * Metro
