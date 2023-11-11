@@ -39,7 +39,6 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Cap
 * Cascade
 * Sand
-* Wooded
 * Lake
 * Lost
 * Metro
@@ -50,7 +49,8 @@ The SMOO server is unchanged so running any SMOO server (that supports client v1
 * Mushroom  
 
 ### Partial Support (limited object set)
-* Moon
+* Moon (haven't found good props)
+* Wooded (crashes if adding more props due to memory limit)
 
 ### No prop support
 * Cloud
