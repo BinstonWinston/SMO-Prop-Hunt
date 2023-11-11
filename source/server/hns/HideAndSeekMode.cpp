@@ -148,7 +148,9 @@ std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb() {
 
     sead::BoundBox3<float> bbox;
     alModelFunction::calcBoundingBox(&bbox, propActor->mModelKeeper->mModelCtrl);
-    return OrientedBoundingBox(bbox, al::getTrans(propActor), al::getQuat(propActor));
+    auto obb = OrientedBoundingBox(bbox, al::getTrans(propActor), al::getQuat(propActor));
+    obb.scale(0.75f);
+    return obb;
 }
 
 bool isCollideWithSeeker(al::LiveActor* actor, al::LiveActor* seeker) {
