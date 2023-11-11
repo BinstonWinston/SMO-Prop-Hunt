@@ -23,6 +23,7 @@ class HideAndSeekMode : public GameModeBase {
         static const char* getCurrentPropName();
         static CaptureTypes::Type getCurrentPropType();
         static void clearCurrentPropAndBecomeSeeker();
+        static void queueUpKillLocalPlayer();
 
         HideAndSeekMode(const char* name);
 
@@ -46,7 +47,10 @@ class HideAndSeekMode : public GameModeBase {
         // cooldown percentage remaining
         std::optional<f32> getPropCooldown();
 
+        void killLocalPlayer(PlayerActorHakoniwa* player);
+
     private:
+        bool mLocalPlayerKillQueued = false;
         float mInvulnTime = 0.0f;
         f32 mPropSwitchCooldownTime = 0.0f;
         GameModeTimer* mModeTimer = nullptr;

@@ -121,14 +121,12 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
     al::Scene *curScene = curSequence->curScene;
     if (curScene && isInGame) {
         auto& holder = ((StageScene*)curScene)->mHolder;
-        gTextWriter->printf("WorldId: %d\n", GameDataFunction::getCurrentWorldId(holder));
-        gTextWriter->printf("Cached WorldId: %d\n", CaptureTypes::currentWorldId);
-        gTextWriter->printf("lastUsedCurrentWorldId: %d\n", CaptureTypes::lastUsedCurrentWorldId);
         if (HideAndSeekMode::getCurrentPropName()) {
             gTextWriter->printf("Prop Name: %s\n", HideAndSeekMode::getCurrentPropName());
         } else {
             gTextWriter->printf("Prop Name: None\n");
         }
+        gTextWriter->printf("wasSensorHit: %d\n", PropActor::wasSensorHit);
     }
 
     gTextWriter->printf("Client Socket Connection Status: %s\n", Client::instance()->mSocket->getStateChar());

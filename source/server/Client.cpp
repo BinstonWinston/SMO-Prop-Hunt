@@ -1153,6 +1153,14 @@ PuppetActor *Client::getPuppet(int idx) {
     }
 }
 
+size_t Client::getPuppetCount() {
+    if(sInstance) {
+        return sInstance->mPuppetHolder->getSize();
+    }else {
+        return 0;
+    }
+}
+
 /**
  * @brief 
  * 

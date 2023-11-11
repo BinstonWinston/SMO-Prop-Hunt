@@ -26,6 +26,9 @@
 #include "helpers.hpp"
 #include "algorithms/CaptureTypes.h"
 
+namespace al {
+    bool isMsgPlayerDisregard(const al::SensorMsg* msg);
+}
 
 struct PropInfo {
     // Flag transform
@@ -35,6 +38,8 @@ struct PropInfo {
 
 class PropActor : public al::LiveActor {
     public:
+        static bool wasSensorHit;
+
         static PropActor* props[CaptureTypes::MAX_PROPS_PER_KINGDOM];
         static PropActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);

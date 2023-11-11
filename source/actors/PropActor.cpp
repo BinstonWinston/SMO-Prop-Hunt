@@ -14,6 +14,10 @@
 #include "server/gamemode/GameModeBase.hpp"
 #include "random/seadRandom.h"
 #include "time/seadTickTime.h"
+#include "al/sensor/HitSensor.h"
+#include "server/hns/HideAndSeekMode.hpp"
+
+bool PropActor::wasSensorHit = false;
 
 PropActor* PropActor::props[CaptureTypes::MAX_PROPS_PER_KINGDOM] = {nullptr};
 
