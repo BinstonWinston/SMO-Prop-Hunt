@@ -36,10 +36,10 @@ namespace CaptureTypes {
         X(SphinxQuiz) \
         X(CollectAnimal) \
         X(SandWorldCandlestand000) \
-        X(ReactionObjectSandWorldParasol) \
+        /* X(ReactionObjectSandWorldParasol) */ \
         X(ReactionObjectCactusA) \
         X(SandWorldHomeBench000) \
-        X(SandWorldHomeTreePalm000) \
+        /* X(SandWorldHomeTreePalm000) */ \
         X(WorldEndType__SandWorld) \
         /* Forest */ \
         X(ForestWorldHomeRock000) \
