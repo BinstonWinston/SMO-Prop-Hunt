@@ -126,7 +126,7 @@ void HideAndSeekMode::end() {
     Client::sendTagInfPacket();
 }
 
-std::optional<sead::BoundBox3<float>> HideAndSeekMode::getBoundingBox_static() {
+std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb_static() {
     if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
         return {};
     }
@@ -137,10 +137,10 @@ std::optional<sead::BoundBox3<float>> HideAndSeekMode::getBoundingBox_static() {
         return {};
     }
 
-    return hsMode->getBoundingBox();
+    return hsMode->getPropObb();
 }
 
-std::optional<sead::BoundBox3<float>> HideAndSeekMode::getBoundingBox() {
+std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb() {
     auto propActor = getPropActor();
     if (!propActor || !propActor->mModelKeeper || !propActor->mModelKeeper->mModelCtrl) {
         return {};
@@ -148,8 +148,7 @@ std::optional<sead::BoundBox3<float>> HideAndSeekMode::getBoundingBox() {
 
     sead::BoundBox3<float> bbox;
     alModelFunction::calcBoundingBox(&bbox, propActor->mModelKeeper->mModelCtrl);
-    bbox.offset(al::getTrans(propActor));
-    return bbox;
+    return OrientedBoundingBox(bbox, al::getTrans(propActor), al::getQuat(propActor));
 }
 
 bool isCollideWithSeeker(al::LiveActor* actor, al::LiveActor* seeker) {

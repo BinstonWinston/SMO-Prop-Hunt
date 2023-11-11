@@ -144,12 +144,9 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
 
         PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
 
-        auto const bboxOpt = HideAndSeekMode::getBoundingBox_static();
-        if (bboxOpt.has_value()) {
-            gTextWriter->printf("BBox: (%.0f,%.0f,%.0f), (%.0f,%.0f,%.0f)\n",
-                bboxOpt.value().getMin().x, bboxOpt.value().getMin().y, bboxOpt.value().getMin().z,
-                bboxOpt.value().getMax().x, bboxOpt.value().getMax().y, bboxOpt.value().getMax().z);
-            // renderer->drawWireCube({bboxOpt.value(), sead::Color4f(.9f, .2f, .2f, 1.f)});
+        auto const propObbOpt = HideAndSeekMode::getPropObb_static();
+        if (propObbOpt.has_value()) {
+            gTextWriter->printf("BBox: Exists\n");
         }
         else {
             gTextWriter->printf("BBox: None\n");
@@ -283,9 +280,10 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
             renderer->drawSphere4x8(al::getTrans(curPuppet), 20, sead::Color4f(0.f, 0.f, 1.f, 0.25f));
         }
 
-        if (bboxOpt.has_value()) {
+        if (propObbOpt.has_value()) {
             sead::Color4f const c{.9f, .2f, .2f, 0.5f};
-            auto const bbox = bboxOpt.value();
+            auto const propObb = propObbOpt.value();
+            auto const obbPoints = propObb.getPoints();
 
             auto const drawLine = [&renderer](sead::Vector3f const& p1, sead::Vector3f const& p2, sead::Color4f const& c) {
                 auto dir = (p2 - p1);
@@ -298,56 +296,56 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
 
             // Min-X YZ-plane face
             drawLine(
-                {bbox.getMin().x, bbox.getMin().y, bbox.getMin().z},
-                {bbox.getMin().x, bbox.getMin().y, bbox.getMax().z},
+                obbPoints[0],
+                obbPoints[1],
                 c);
             drawLine(
-                {bbox.getMin().x, bbox.getMin().y, bbox.getMax().z},
-                {bbox.getMin().x, bbox.getMax().y, bbox.getMax().z},
+                obbPoints[1],
+                obbPoints[3],
                 c);
             drawLine(
-                {bbox.getMin().x, bbox.getMax().y, bbox.getMax().z},
-                {bbox.getMin().x, bbox.getMax().y, bbox.getMin().z},
+                obbPoints[3],
+                obbPoints[2],
                 c);
             drawLine(
-                {bbox.getMin().x, bbox.getMax().y, bbox.getMin().z},
-                {bbox.getMin().x, bbox.getMin().y, bbox.getMin().z},
+                obbPoints[2],
+                obbPoints[0],
                 c);
 
             // Max-X YZ-plane face
             drawLine(
-                {bbox.getMax().x, bbox.getMin().y, bbox.getMin().z},
-                {bbox.getMax().x, bbox.getMin().y, bbox.getMax().z},
+                obbPoints[4],
+                obbPoints[5],
                 c);
             drawLine(
-                {bbox.getMax().x, bbox.getMin().y, bbox.getMax().z},
-                {bbox.getMax().x, bbox.getMax().y, bbox.getMax().z},
+                obbPoints[5],
+                obbPoints[7],
                 c);
             drawLine(
-                {bbox.getMax().x, bbox.getMax().y, bbox.getMax().z},
-                {bbox.getMax().x, bbox.getMax().y, bbox.getMin().z},
+                obbPoints[7],
+                obbPoints[6],
                 c);
             drawLine(
-                {bbox.getMax().x, bbox.getMax().y, bbox.getMin().z},
-                {bbox.getMax().x, bbox.getMin().y, bbox.getMin().z},
+                obbPoints[6],
+                obbPoints[4],
                 c);
 
             // Edges connecting two faces above
             drawLine(
-                {bbox.getMin().x, bbox.getMin().y, bbox.getMin().z},
-                {bbox.getMax().x, bbox.getMin().y, bbox.getMin().z},
+                obbPoints[0],
+                obbPoints[4],
                 c);
             drawLine(
-                {bbox.getMin().x, bbox.getMin().y, bbox.getMax().z},
-                {bbox.getMax().x, bbox.getMin().y, bbox.getMax().z},
+                obbPoints[1],
+                obbPoints[5],
                 c);
             drawLine(
-                {bbox.getMin().x, bbox.getMax().y, bbox.getMax().z},
-                {bbox.getMax().x, bbox.getMax().y, bbox.getMax().z},
+                obbPoints[2],
+                obbPoints[6],
                 c);
             drawLine(
-                {bbox.getMin().x, bbox.getMax().y, bbox.getMin().z},
-                {bbox.getMax().x, bbox.getMax().y, bbox.getMin().z},
+                obbPoints[3],
+                obbPoints[7],
                 c);
         }
 

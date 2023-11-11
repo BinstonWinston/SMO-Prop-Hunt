@@ -8,6 +8,7 @@
 #include "server/gamemode/GameModeTimer.hpp"
 #include "server/hns/HideAndSeekConfigMenu.hpp"
 #include "actors/PropActor.h"
+#include "server/hns/OrientedBoundingBox.hpp"
 
 struct HideAndSeekInfo : GameModeInfoBase {
     HideAndSeekInfo() { mMode = GameMode::HIDEANDSEEK; }
@@ -25,8 +26,8 @@ class HideAndSeekMode : public GameModeBase {
         static void clearCurrentPropAndBecomeSeeker();
         static void queueUpKillLocalPlayer();
 
-        static std::optional<sead::BoundBox3<float>> getBoundingBox_static();
-        std::optional<sead::BoundBox3<float>> getBoundingBox();
+        static std::optional<OrientedBoundingBox> getPropObb_static();
+        std::optional<OrientedBoundingBox> getPropObb();
 
         HideAndSeekMode(const char* name);
 
