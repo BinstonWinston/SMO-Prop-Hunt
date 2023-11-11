@@ -28,6 +28,7 @@ class HideAndSeekMode : public GameModeBase {
 
         static std::optional<OrientedBoundingBox> getPropObb_static();
         std::optional<OrientedBoundingBox> getPropObb();
+        bool isCollideWithSeeker(sead::Vector3f const& seekerPos);
 
         HideAndSeekMode(const char* name);
 

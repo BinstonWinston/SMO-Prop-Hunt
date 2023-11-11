@@ -23,13 +23,11 @@
 #include "server/hns/HideAndSeekConfigMenu.hpp"
 #include "actors/PropActor.h"
 
-#include "al/collision/CollisionDirector.h"
-#include "al/collision/alCollisionUtil.h"
-#include "al/collision/Triangle.h"
 #include "al/model/ModelFunction.h"
 #include "al/util/VectorUtil.h"
 
 static constexpr f32 PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS = 5;
+constexpr f32 MARIO_RADIUS = 100.f;
 
 HideAndSeekMode::HideAndSeekMode(const char* name) : GameModeBase(name) {}
 
@@ -153,49 +151,12 @@ std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb() {
     return obb;
 }
 
-bool isCollideWithSeeker(al::LiveActor* actor, al::LiveActor* seeker) {
-    // if (getPropActor()->getCollisionDirector()->checkStrikeSphere(al::getTrans(getPropActor()), MARIO_RADIUS*10000.f, true, curInfo->playerPos)) {
-
-    sead::BoundBox3<float> bbox;
-    alModelFunction::calcBoundingBox(&bbox, actor->mModelKeeper->mModelCtrl);
-
-    auto seekerPos = al::getTrans(seeker);
-    seekerPos -= al::getTrans(actor);
-    auto rot = al::getQuat(actor);
-    sead::Quatf rotI;
-    rot.inverse(&rotI);
-    al::rotateVectorQuat(&seekerPos, rotI);
-
-    constexpr f32 SEEKER_RADIUS = 200.f;
-    return (bbox.getMin().x < seekerPos.x + SEEKER_RADIUS &&
-        bbox.getMin().y < seekerPos.y + SEEKER_RADIUS &&
-        bbox.getMin().z < seekerPos.z + SEEKER_RADIUS &&
-        seekerPos.x - SEEKER_RADIUS < bbox.getMax().x &&
-        seekerPos.y - SEEKER_RADIUS < bbox.getMax().y &&
-        seekerPos.z - SEEKER_RADIUS < bbox.getMax().z);
-
-    // al::Triangle downTri; // Triangle information for below player
-    // al::Triangle frontTri; // Triangle informaton for in front of player
-    
-    // // Raycast origin
-    // sead::Vector3f rayOrg = al::getTrans(actor);
-    // rayOrg.y += 30.f;
-
-    // // Directional rays
-    // sead::Vector3f downRay = { 0.f, -3000.f, 0.f };
-
-    // sead::Vector3f frontRay;
-    // al::calcFrontDir(&frontRay, actor);
-    // frontRay *= 3000.f;
-
-    // // Find triangles
-    // if(alCollisionUtil::getFirstPolyOnArrow(actor, nullptr, &downTri, rayOrg, downRay, nullptr, nullptr) &&
-    //     downTri.mCollisionParts) {
-    //     return true;
-    // }
-    // if(alCollisionUtil::getFirstPolyOnArrow(actor, nullptr, &frontTri, rayOrg, frontRay, nullptr, nullptr)) {
-    //     return true;
-    // }
+bool HideAndSeekMode::isCollideWithSeeker(sead::Vector3f const& seekerPos) {
+    auto propObb = getPropObb();
+    if (!propObb.has_value()) {
+        return false;
+    }
+    return propObb.value().isInside(seekerPos, MARIO_RADIUS);
 }
 
 void HideAndSeekMode::update() {
@@ -231,10 +192,9 @@ void HideAndSeekMode::update() {
                         float pupDist = al::calcDistance(playerBase, curInfo->playerPos); // TODO: remove distance calculations and use hit sensors to determine this
 
                         if (!isYukimaru) {
-                            constexpr f32 MARIO_RADIUS = 200.f;
-                            if (isCollideWithSeeker(getPropActor(), Client::getPuppet(i))) {
+                            if (isCollideWithSeeker(curInfo->playerPos)) {
                                 killLocalPlayer((PlayerActorHakoniwa*)playerBase);
-                            } else if(pupDist < MARIO_RADIUS && ((PlayerActorHakoniwa*)playerBase)->mDimKeeper->is2DModel == curInfo->is2D) {
+                            } else if(pupDist < MARIO_RADIUS*2.f && ((PlayerActorHakoniwa*)playerBase)->mDimKeeper->is2DModel == curInfo->is2D) {
                                 // killLocalPlayer((PlayerActorHakoniwa*)playerBase);
                             } else if (PlayerFunction::isPlayerDeadStatus(playerBase)) {
 

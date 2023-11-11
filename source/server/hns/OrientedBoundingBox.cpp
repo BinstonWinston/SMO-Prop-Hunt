@@ -13,11 +13,15 @@ OrientedBoundingBox::OrientedBoundingBox(
 bool OrientedBoundingBox::isInside(sead::Vector3f const& p, f32 radius) const {
     auto localPos = p;
     localPos -= mPos;
-    sead::Quatf rotI = mRot;
     sead::Quatf rot = mRot;
-    rotI.inverse(&rot);
+    sead::Quatf rotI = mRot;
+    rot.inverse(&rotI);
     al::rotateVectorQuat(&localPos, rotI);
-    return mBbox.isInside(localPos);
+    sead::BoundBox3f bboxExpandedBySearchRadius{
+        mBbox.getMin() - sead::Vector3f(1.f,1.f,1.f)*radius,
+        mBbox.getMax() + sead::Vector3f(1.f,1.f,1.f)*radius,
+    };
+    return bboxExpandedBySearchRadius.isInside(localPos);
 }
 
 std::array<sead::Vector3f, 8> OrientedBoundingBox::getPoints() const {
