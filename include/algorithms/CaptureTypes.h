@@ -113,7 +113,6 @@ namespace CaptureTypes {
         X(LavaWorldHomeWheelParts000) \
         X(HackFork) \
         X(LavaWorldCandlestand000) \
-        X(RadishGold) \
         X(SaucePan) \
         X(LavaWorldHomeTable000) \
         X(ReactionObjectLavaWorldStalkTurnip) \
