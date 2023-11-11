@@ -42,8 +42,7 @@ std::array<sead::Vector3f, 8> OrientedBoundingBox::getPoints() const {
     return points;
 }
 
-void OrientedBoundingBox::scale(f32 s) {
+void OrientedBoundingBox::scaleXZ(f32 s) {
     mBbox.scaleX(s);
-    mBbox.scaleY(s);
     mBbox.scaleZ(s);
 }

@@ -14,7 +14,7 @@ public:
 
     bool isInside(sead::Vector3f const& p, f32 radius) const;
     std::array<sead::Vector3f, 8> getPoints() const;
-    void scale(f32 s);
+    void scaleXZ(f32 s);
 private:
     sead::BoundBox3f mBbox;
     sead::Vector3f mPos;

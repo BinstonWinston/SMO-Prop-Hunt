@@ -57,9 +57,7 @@ namespace CaptureTypes {
         X(CapAppearTargetStepC) \
         X(WorldEndType__CloudWorld) \
         /* Clash */ \
-        X(ClashWorldHomeTree000) \
         X(CageBreakable) \
-        X(ClashWorldHomeHipDropTransformParts000) \
         X(ClashWorldHomeTree003) \
         X(CapCatapult) \
         X(CatchBomb) \
@@ -73,13 +71,11 @@ namespace CaptureTypes {
         X(Car) \
         X(CityWorldTableB) \
         X(CityWorldTableC) \
-        X(CityWorldChairB) \
         X(StreetlightA) \
         X(ParkingMeter) \
         X(CityWorldHomeStep033) \
         X(CityWorldHomeFrame009) \
         X(CityWorldHomeTree000) \
-        X(CityWorldHomeSignal000) \
         X(WorldEndType__CityWorld) \
         /* Sea */ \
         X(SeaWorldHomeGatePillar000) \
@@ -90,7 +86,6 @@ namespace CaptureTypes {
         X(Shine) \
         X(SeaWorldHomeBottle000) \
         X(SeaWorldBush) \
-        X(SeaWorldParasol) \
         X(WorldEndType__SeaWorld) \
         /* Snow */ \
         X(SnowWorldHomeWindBlowParts000) \
@@ -109,7 +104,6 @@ namespace CaptureTypes {
         X(LavaWorldCandlestand000) \
         X(SaucePan) \
         X(LavaWorldHomeTable000) \
-        X(ReactionObjectLavaWorldStalkTurnip) \
         X(WorldEndType__LavaWorld) \
         /* BossRaidWorld (Ruined) */ \
         X(WorldEndType__BossRaidWorld) \
@@ -122,8 +116,6 @@ namespace CaptureTypes {
         X(SkyWorldHomeGate002) \
         X(ElectricWireTargetEnd) \
         X(Togezo) \
-        X(Donsuke) \
-        X(SkyWorldParasolA) \
         X(SkyWorldFlagA) \
         X(WorldEndType__SkyWorld) \
         /* Moon TODO add more objects */ \
@@ -133,11 +125,9 @@ namespace CaptureTypes {
         X(MoonWorldBreakParts) \
         X(WorldEndType__MoonWorld) \
         /* Peach */ \
-        X(PeachWorldHomeBridge) \
         X(PeachWorldHomeTree000) \
         X(PeachWorldHomeTree001) \
         X(PeachWorldHomeTower000) \
-        X(PeachWorldHomeGarden) \
         X(PeachWorldVase) \
         X(PeachWorldCastleInsideChair) \
         X(PeachWorldTrampolineMushroomA) \

@@ -147,7 +147,7 @@ std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb() {
     sead::BoundBox3<float> bbox;
     alModelFunction::calcBoundingBox(&bbox, propActor->mModelKeeper->mModelCtrl);
     auto obb = OrientedBoundingBox(bbox, al::getTrans(propActor), al::getQuat(propActor));
-    obb.scale(0.75f);
+    obb.scaleXZ(0.75f);
     return obb;
 }
 
@@ -195,7 +195,7 @@ void HideAndSeekMode::update() {
                             if (isCollideWithSeeker(curInfo->playerPos)) {
                                 killLocalPlayer((PlayerActorHakoniwa*)playerBase);
                             } else if(pupDist < MARIO_RADIUS*2.f && ((PlayerActorHakoniwa*)playerBase)->mDimKeeper->is2DModel == curInfo->is2D) {
-                                // killLocalPlayer((PlayerActorHakoniwa*)playerBase);
+                                killLocalPlayer((PlayerActorHakoniwa*)playerBase);
                             } else if (PlayerFunction::isPlayerDeadStatus(playerBase)) {
 
                                 mInfo->mIsPlayerIt = true;
