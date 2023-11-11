@@ -25,6 +25,9 @@ class HideAndSeekMode : public GameModeBase {
         static void clearCurrentPropAndBecomeSeeker();
         static void queueUpKillLocalPlayer();
 
+        static std::optional<sead::BoundBox3<float>> getBoundingBox_static();
+        std::optional<sead::BoundBox3<float>> getBoundingBox();
+
         HideAndSeekMode(const char* name);
 
         void init(GameModeInitInfo const& info) override;

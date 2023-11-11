@@ -126,6 +126,32 @@ void HideAndSeekMode::end() {
     Client::sendTagInfPacket();
 }
 
+std::optional<sead::BoundBox3<float>> HideAndSeekMode::getBoundingBox_static() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return {};
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+
+    if (!hsMode) {
+        return {};
+    }
+
+    return hsMode->getBoundingBox();
+}
+
+std::optional<sead::BoundBox3<float>> HideAndSeekMode::getBoundingBox() {
+    auto propActor = getPropActor();
+    if (!propActor || !propActor->mModelKeeper || !propActor->mModelKeeper->mModelCtrl) {
+        return {};
+    }
+
+    sead::BoundBox3<float> bbox;
+    alModelFunction::calcBoundingBox(&bbox, propActor->mModelKeeper->mModelCtrl);
+    bbox.offset(al::getTrans(propActor));
+    return bbox;
+}
+
 bool isCollideWithSeeker(al::LiveActor* actor, al::LiveActor* seeker) {
     // if (getPropActor()->getCollisionDirector()->checkStrikeSphere(al::getTrans(getPropActor()), MARIO_RADIUS*10000.f, true, curInfo->playerPos)) {
 
@@ -338,6 +364,9 @@ const char* HideAndSeekMode::getCurrentPropName() {
     }
 
     HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+    if (!hsMode) {
+        return nullptr;
+    }
 
     auto propActor = hsMode->getPropActor();
     if (!propActor) {

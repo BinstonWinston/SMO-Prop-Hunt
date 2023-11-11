@@ -144,6 +144,17 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
 
         PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
 
+        auto const bboxOpt = HideAndSeekMode::getBoundingBox_static();
+        if (bboxOpt.has_value()) {
+            gTextWriter->printf("BBox: (%.0f,%.0f,%.0f), (%.0f,%.0f,%.0f)\n",
+                bboxOpt.value().getMin().x, bboxOpt.value().getMin().y, bboxOpt.value().getMin().z,
+                bboxOpt.value().getMax().x, bboxOpt.value().getMax().y, bboxOpt.value().getMax().z);
+            // renderer->drawWireCube({bboxOpt.value(), sead::Color4f(.9f, .2f, .2f, 1.f)});
+        }
+        else {
+            gTextWriter->printf("BBox: None\n");
+        }
+
         PuppetActor* curPuppet = Client::getPuppet(debugPuppetIndex);
 
         PuppetActor *debugPuppet = Client::getDebugPuppet();
@@ -270,6 +281,74 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
         if (curPuppet) {
             renderer->drawSphere4x8(curPuppet->getInfo()->playerPos, 20, sead::Color4f(1.f, 0.f, 0.f, 0.25f));
             renderer->drawSphere4x8(al::getTrans(curPuppet), 20, sead::Color4f(0.f, 0.f, 1.f, 0.25f));
+        }
+
+        if (bboxOpt.has_value()) {
+            sead::Color4f const c{.9f, .2f, .2f, 0.5f};
+            auto const bbox = bboxOpt.value();
+
+            auto const drawLine = [&renderer](sead::Vector3f const& p1, sead::Vector3f const& p2, sead::Color4f const& c) {
+                auto dir = (p2 - p1);
+                auto const length = dir.normalize();
+                f32 const radius = 20.f;
+                for (f32 t = 0.f; t < length; t += radius) {
+                    renderer->drawSphere4x8(p1 + dir*t, radius, c);
+                }
+            };
+
+            // Min-X YZ-plane face
+            drawLine(
+                {bbox.getMin().x, bbox.getMin().y, bbox.getMin().z},
+                {bbox.getMin().x, bbox.getMin().y, bbox.getMax().z},
+                c);
+            drawLine(
+                {bbox.getMin().x, bbox.getMin().y, bbox.getMax().z},
+                {bbox.getMin().x, bbox.getMax().y, bbox.getMax().z},
+                c);
+            drawLine(
+                {bbox.getMin().x, bbox.getMax().y, bbox.getMax().z},
+                {bbox.getMin().x, bbox.getMax().y, bbox.getMin().z},
+                c);
+            drawLine(
+                {bbox.getMin().x, bbox.getMax().y, bbox.getMin().z},
+                {bbox.getMin().x, bbox.getMin().y, bbox.getMin().z},
+                c);
+
+            // Max-X YZ-plane face
+            drawLine(
+                {bbox.getMax().x, bbox.getMin().y, bbox.getMin().z},
+                {bbox.getMax().x, bbox.getMin().y, bbox.getMax().z},
+                c);
+            drawLine(
+                {bbox.getMax().x, bbox.getMin().y, bbox.getMax().z},
+                {bbox.getMax().x, bbox.getMax().y, bbox.getMax().z},
+                c);
+            drawLine(
+                {bbox.getMax().x, bbox.getMax().y, bbox.getMax().z},
+                {bbox.getMax().x, bbox.getMax().y, bbox.getMin().z},
+                c);
+            drawLine(
+                {bbox.getMax().x, bbox.getMax().y, bbox.getMin().z},
+                {bbox.getMax().x, bbox.getMin().y, bbox.getMin().z},
+                c);
+
+            // Edges connecting two faces above
+            drawLine(
+                {bbox.getMin().x, bbox.getMin().y, bbox.getMin().z},
+                {bbox.getMax().x, bbox.getMin().y, bbox.getMin().z},
+                c);
+            drawLine(
+                {bbox.getMin().x, bbox.getMin().y, bbox.getMax().z},
+                {bbox.getMax().x, bbox.getMin().y, bbox.getMax().z},
+                c);
+            drawLine(
+                {bbox.getMin().x, bbox.getMax().y, bbox.getMax().z},
+                {bbox.getMax().x, bbox.getMax().y, bbox.getMax().z},
+                c);
+            drawLine(
+                {bbox.getMin().x, bbox.getMax().y, bbox.getMin().z},
+                {bbox.getMax().x, bbox.getMax().y, bbox.getMin().z},
+                c);
         }
 
         renderer->end();
