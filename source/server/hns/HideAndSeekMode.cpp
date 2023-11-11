@@ -23,7 +23,11 @@
 #include "server/hns/HideAndSeekConfigMenu.hpp"
 #include "actors/PropActor.h"
 
+#include "al/model/ModelFunction.h"
+#include "al/util/VectorUtil.h"
+
 static constexpr f32 PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS = 5;
+constexpr f32 MARIO_RADIUS = 100.f;
 
 HideAndSeekMode::HideAndSeekMode(const char* name) : GameModeBase(name) {}
 
@@ -120,6 +124,41 @@ void HideAndSeekMode::end() {
     Client::sendTagInfPacket();
 }
 
+std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb_static() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return {};
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+
+    if (!hsMode) {
+        return {};
+    }
+
+    return hsMode->getPropObb();
+}
+
+std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb() {
+    auto propActor = getPropActor();
+    if (!propActor || !propActor->mModelKeeper || !propActor->mModelKeeper->mModelCtrl) {
+        return {};
+    }
+
+    sead::BoundBox3<float> bbox;
+    alModelFunction::calcBoundingBox(&bbox, propActor->mModelKeeper->mModelCtrl);
+    auto obb = OrientedBoundingBox(bbox, al::getTrans(propActor), al::getQuat(propActor));
+    obb.scaleXZ(0.75f);
+    return obb;
+}
+
+bool HideAndSeekMode::isCollideWithSeeker(sead::Vector3f const& seekerPos) {
+    auto propObb = getPropObb();
+    if (!propObb.has_value()) {
+        return false;
+    }
+    return propObb.value().isInside(seekerPos, MARIO_RADIUS);
+}
+
 void HideAndSeekMode::update() {
 
     PlayerActorBase* playerBase = rs::getPlayerActor(mCurScene);
@@ -153,22 +192,10 @@ void HideAndSeekMode::update() {
                         float pupDist = al::calcDistance(playerBase, curInfo->playerPos); // TODO: remove distance calculations and use hit sensors to determine this
 
                         if (!isYukimaru) {
-                            if(pupDist < 200.f && ((PlayerActorHakoniwa*)playerBase)->mDimKeeper->is2DModel == curInfo->is2D) {
-                                if(!PlayerFunction::isPlayerDeadStatus(playerBase)) {
-                                    
-                                    GameDataFunction::killPlayer(GameDataHolderAccessor(this));
-                                    playerBase->startDemoPuppetable();
-                                    al::setVelocityZero(playerBase);
-                                    rs::faceToCamera(playerBase);
-                                    ((PlayerActorHakoniwa*)playerBase)->mPlayerAnimator->endSubAnim();
-                                    ((PlayerActorHakoniwa*)playerBase)->mPlayerAnimator->startAnimDead();
-
-                                    mInfo->mIsPlayerIt = true;
-                                    mModeTimer->disableTimer();
-                                    mModeLayout->showSeeking();
-                                    
-                                    Client::sendTagInfPacket();
-                                }
+                            if (isCollideWithSeeker(curInfo->playerPos)) {
+                                killLocalPlayer((PlayerActorHakoniwa*)playerBase);
+                            } else if(pupDist < MARIO_RADIUS*2.f && ((PlayerActorHakoniwa*)playerBase)->mDimKeeper->is2DModel == curInfo->is2D) {
+                                killLocalPlayer((PlayerActorHakoniwa*)playerBase);
                             } else if (PlayerFunction::isPlayerDeadStatus(playerBase)) {
 
                                 mInfo->mIsPlayerIt = true;
@@ -188,6 +215,11 @@ void HideAndSeekMode::update() {
         }
 
         mModeTimer->updateTimer();
+    }
+
+    if (!isYukimaru && mLocalPlayerKillQueued) {
+        mLocalPlayerKillQueued = false;
+        killLocalPlayer(reinterpret_cast<PlayerActorHakoniwa*>(playerBase));
     }
 
     if (mInfo->mIsUseGravity && !isYukimaru) {
@@ -269,12 +301,33 @@ void HideAndSeekMode::update() {
     mInfo->mHidingTime = mModeTimer->getTime();
 }
 
+void HideAndSeekMode::killLocalPlayer(PlayerActorHakoniwa* player) {
+    if(!PlayerFunction::isPlayerDeadStatus(player)) {
+                                    
+    GameDataFunction::killPlayer(GameDataHolderAccessor(this));
+    player->startDemoPuppetable();
+    al::setVelocityZero(player);
+    rs::faceToCamera(player);
+    (player)->mPlayerAnimator->endSubAnim();
+    (player)->mPlayerAnimator->startAnimDead();
+
+    mInfo->mIsPlayerIt = true;
+    mModeTimer->disableTimer();
+    mModeLayout->showSeeking();
+    
+    Client::sendTagInfPacket();
+    }
+}
+
 const char* HideAndSeekMode::getCurrentPropName() {
     if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
         return nullptr;
     }
 
     HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+    if (!hsMode) {
+        return nullptr;
+    }
 
     auto propActor = hsMode->getPropActor();
     if (!propActor) {
@@ -366,4 +419,16 @@ std::optional<f32> HideAndSeekMode::getPropCooldown() {
         return {};
     }
     return mPropSwitchCooldownTime / PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS;
+}
+
+void HideAndSeekMode::queueUpKillLocalPlayer() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return;
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+    if (!hsMode) {
+        return;
+    }
+    hsMode->mLocalPlayerKillQueued = true;
 }

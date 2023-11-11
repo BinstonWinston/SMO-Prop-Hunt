@@ -124,6 +124,7 @@ class Client {
         static const char *getClientName() { return sInstance ? sInstance->mUsername.cstr() : "Player"; }
 
         static PuppetActor *getPuppet(int idx);
+        static size_t getPuppetCount();
 
         static PuppetInfo *getPuppetInfo(int idx);
 
