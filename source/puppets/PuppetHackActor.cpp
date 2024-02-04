@@ -66,12 +66,12 @@ void PuppetHackActor::control() {
 al::ModelKeeper* overrideModelKeeper = nullptr;
 
 void hookInitActorModelKeeper(al::LiveActor* actor, al::ActorInitInfo const& initInfo, al::ActorResource* actorResource, int param_4) {
-    if (!overrideModelKeeper || !actor) {
+    // if (!overrideModelKeeper || !actor) {
         al::initActorModelKeeper(actor, initInfo, actorResource, param_4);
-        return;
-    }
+    //     return;
+    // }
 
-    actor->initModelKeeper(overrideModelKeeper);
+    // actor->initModelKeeper(overrideModelKeeper);
 };
 
 PuppetHackActor *createPuppetHackActorFromFactory(al::ActorInitInfo const &rootInitInfo, const al::PlacementInfo *rootPlacementInfo, PuppetInfo *curInfo, const char *hackType) {
@@ -122,9 +122,9 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
             PuppetHackActor* decoyActor = createPuppetHackActorFromFactory(
                 initInfo, &placement, curPuppet->getInfo(), hackName);
             if (decoyActor) {
-                curPuppet->addDecoyProp(decoyActor);
+                curPuppet->addDecoyProp(decoyActor, hackName);
                 if (!overrideModelKeeper) {
-                    overrideModelKeeper = dupliActor->mModelKeeper;
+                    overrideModelKeeper = decoyActor->mModelKeeper;
                 }
             }
         }

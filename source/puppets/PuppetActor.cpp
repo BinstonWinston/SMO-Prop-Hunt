@@ -161,6 +161,25 @@ void PuppetActor::control() {
 
         // Capture Updating
 
+        if (mInfo->decoyPropInfo.has_value() && mDecoyPropModelType != mInfo->decoyPropInfo->propType) {
+            if (mDecoyProps->getCurrentActor()) {
+                mDecoyProps->getCurrentActor()->makeActorDead();  // sets previous model to dead so we can try to
+            }
+            // switch to capture model
+            setDecoyProp(CaptureTypes::FindStr(mInfo->curHack));
+            mDecoyPropModelType = mInfo->curHack;
+            if (mDecoyProps->getCurrentActor()) {
+                mDecoyProps->getCurrentActor()->makeActorAlive();  // make new model alive
+                *al::getTransPtr(mDecoyProps->getCurrentActor()) = mInfo->decoyPropInfo->pos;
+                *al::getQuatPtr(mDecoyProps->getCurrentActor()) = mInfo->decoyPropInfo->rot;
+            }
+        } else if (!mInfo->decoyPropInfo.has_value() && mDecoyPropModelType != CaptureTypes::Type::Unknown) {
+            if (mDecoyProps->getCurrentActor()) {
+                mDecoyProps->getCurrentActor()->makeActorDead();  // sets previous model to dead so we can try to
+            }
+            mDecoyPropModelType = CaptureTypes::Type::Unknown;
+        }
+
         if (mInfo->isCaptured && mCaptureModelType != mInfo->curHack) {
 
             getCurrentModel()->makeActorDead();  // sets previous model to dead so we can try to
@@ -403,6 +422,16 @@ bool PuppetActor::setCapture(const char* captureName) {
         return true;
     } else {
         mCurCapture = CaptureTypes::Type::Unknown;
+        return false;
+    }
+}
+
+bool PuppetActor::setDecoyProp(const char* captureName) {
+    if (captureName && mDecoyProps->setCurrent(captureName)) {
+        mCurDecoyProp = CaptureTypes::FindType(captureName);
+        return true;
+    } else {
+        mCurDecoyProp = CaptureTypes::Type::Unknown;
         return false;
     }
 }

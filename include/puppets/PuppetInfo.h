@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "algorithms/PlayerAnims.h"
 #include "algorithms/CaptureTypes.h"
 #include "packets/Packet.h"
@@ -13,6 +15,14 @@
 #include "sead/math/seadQuat.h"
 
 constexpr size_t PROP_ACTOR_NAME_MAX_LENGTH = 0x40;
+
+struct DecoyPropInfo {
+    sead::Vector3f pos;
+    sead::Quatf rot;
+    sead::FixedSafeString<0x40> stageName;
+    u8 scenario;
+    CaptureTypes::Type propType;
+};
 
 struct PuppetInfo {
     // General Puppet Info
@@ -51,4 +61,7 @@ struct PuppetInfo {
     bool isIt = false;
     u8 seconds = 0;
     u16 minutes = 0;
+
+    // Prop hunt
+    std::optional<DecoyPropInfo> decoyPropInfo;
 };

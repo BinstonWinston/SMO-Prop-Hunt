@@ -738,7 +738,8 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         if (packet->hackName[0] >= '\0') {
             packet->hackName[0]++;
         }
-        packet->hackName[1] = '\0';
+        packet->hackName[1] = HideAndSeekMode::getDecoyPropInfo_static().has_value();
+        packet->hackName[2] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = true;
@@ -749,7 +750,8 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         if (packet->hackName[0] >= '\0') {
             packet->hackName[0]++;
         }
-        packet->hackName[1] = '\0';
+        packet->hackName[1] = false;
+        packet->hackName[2] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = false;
@@ -902,6 +904,16 @@ void Client::updateCaptureInfo(CaptureInf* packet) {
     auto value = packet->hackName[0];
     if (value > '\0') {
         value--;
+    }
+    bool const droppedDecoy = packet->hackName[1];
+    if (droppedDecoy && (!curInfo->decoyPropInfo.has_value() || curInfo->decoyPropInfo->propType != curInfo->curHack)) {
+        curInfo->decoyPropInfo = DecoyPropInfo{
+            .pos = curInfo->playerPos,
+            .rot = curInfo->playerRot,
+            .stageName = sead::FixedSafeString<0x40>(curInfo->stageName),
+            .scenario = curInfo->scenarioNo,
+            .propType = curInfo->curHack
+        };
     }
     curInfo->curHack = CaptureTypes::ToType(value);
     curInfo->isCaptured = (curInfo->curHack != CaptureTypes::Type::Unknown);

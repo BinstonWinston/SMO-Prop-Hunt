@@ -76,6 +76,7 @@ class PuppetActor : public al::LiveActor {
         void changeModel(const char* newModel);
 
         bool setCapture(const char* captureName);
+        bool setDecoyProp(const char* captureName);
 
         void syncPose();
 
@@ -88,11 +89,13 @@ class PuppetActor : public al::LiveActor {
         NameTag *mNameTag = nullptr;
 
         CaptureTypes::Type mCurCapture = CaptureTypes::Type::Unknown;
+        CaptureTypes::Type mCurDecoyProp = CaptureTypes::Type::Unknown;
 
         bool mIs2DModel = false;
 
         // Unknown means uncaptured
         CaptureTypes::Type mCaptureModelType = CaptureTypes::Type::Unknown;
+        CaptureTypes::Type mDecoyPropModelType = CaptureTypes::Type::Unknown;
 
         float mClosingSpeed = 0;
 };
