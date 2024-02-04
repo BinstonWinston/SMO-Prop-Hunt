@@ -58,6 +58,7 @@ class PuppetActor : public al::LiveActor {
         PuppetInfo* getInfo() { return mInfo; }
 
         bool addCapture(PuppetHackActor *capture, const char *hackType);
+        bool addDecoyProp(PuppetHackActor *capture, const char *hackType);
 
         al::LiveActor* getCurrentModel();
 
@@ -83,6 +84,7 @@ class PuppetActor : public al::LiveActor {
         PuppetCapActor *mPuppetCap = nullptr;
         PlayerModelHolder *mModelHolder = nullptr;
         HackModelHolder* mCaptures = nullptr;
+        HackModelHolder* mDecoyProps = nullptr;
         NameTag *mNameTag = nullptr;
 
         CaptureTypes::Type mCurCapture = CaptureTypes::Type::Unknown;

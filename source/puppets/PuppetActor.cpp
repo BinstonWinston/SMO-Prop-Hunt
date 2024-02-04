@@ -32,6 +32,7 @@ static const char *subActorNames[] = {
 PuppetActor::PuppetActor(const char *name) : al::LiveActor(name) {
     mPuppetCap = new PuppetCapActor(name);
     mCaptures = new HackModelHolder();
+    mDecoyProps = new HackModelHolder();
     mModelHolder = new PlayerModelHolder(3); // Regular Model, 2D Model, 2D Mini Model
 }
 
@@ -349,6 +350,15 @@ bool PuppetActor::isInCaptureList(const char *hackName) {
 bool PuppetActor::addCapture(PuppetHackActor* capture, const char* hackType) {
 
     if (mCaptures->addCapture(capture, hackType)) {
+        return true;
+    }
+    
+    return false;
+}
+
+bool PuppetActor::addDecoyProp(PuppetHackActor* capture, const char* hackType) {
+
+    if (mDecoyProps->addCapture(capture, hackType)) {
         return true;
     }
     

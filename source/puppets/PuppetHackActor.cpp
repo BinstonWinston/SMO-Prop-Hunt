@@ -114,7 +114,18 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
                 initInfo, &placement, curPuppet->getInfo(), hackName);
             if (dupliActor) {
                 curPuppet->addCapture(dupliActor, hackName);
-                overrideModelKeeper = dupliActor->mModelKeeper;
+                if (!overrideModelKeeper) {
+                    overrideModelKeeper = dupliActor->mModelKeeper;
+                }
+            }
+
+            PuppetHackActor* decoyActor = createPuppetHackActorFromFactory(
+                initInfo, &placement, curPuppet->getInfo(), hackName);
+            if (decoyActor) {
+                curPuppet->addDecoyProp(decoyActor);
+                if (!overrideModelKeeper) {
+                    overrideModelKeeper = dupliActor->mModelKeeper;
+                }
             }
         }
     }

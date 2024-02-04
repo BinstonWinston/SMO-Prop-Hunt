@@ -124,6 +124,41 @@ void HideAndSeekMode::end() {
     Client::sendTagInfPacket();
 }
 
+void HideAndSeekMode::setDecoyPropInfo() {
+    PropActor* propActor = getPropActor();
+    if (!propActor) {
+        return;
+    }
+
+    sead::Quatf rot{};
+    al::calcQuat(&rot, propActor);
+    mDecoyPropInfo = DecoyPropInfo{
+        .pos = al::getTrans(propActor),
+        .rot = rot,
+        .stageName = Client::instance()->getStageName(),
+        .scenario = Client::instance()->getScenarioNo(),
+        .propType = getCurrentPropType()
+    };
+}
+
+std::optional<DecoyPropInfo> HideAndSeekMode::getDecoyPropInfo_static() {
+    if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
+        return {};
+    }
+
+    HideAndSeekMode* hsMode = GameModeManager::instance()->getMode<HideAndSeekMode>();
+
+    if (!hsMode) {
+        return {};
+    }
+
+    return hsMode->getDecoyPropInfo();
+}
+
+std::optional<DecoyPropInfo> HideAndSeekMode::getDecoyPropInfo() {
+    return mDecoyPropInfo;
+}
+
 std::optional<OrientedBoundingBox> HideAndSeekMode::getPropObb_static() {
     if (!GameModeManager::instance()->isMode(GameMode::HIDEANDSEEK)) {
         return {};
@@ -269,20 +304,21 @@ void HideAndSeekMode::update() {
     mPropSwitchCooldownTime += Time::deltaTime;
 
     if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown && !getPropCooldown().has_value()) {
-        disablePropMode(playerBase, isYukimaru); // Hide current prop
-        auto propId = static_cast<s32>(mInfo->mPropType) - static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
-        propId = std::max(0, propId);
-        propId++; // Go to next prop
-        propId %= CaptureTypes::getTypesForCurrentWorld().size();
-        propId += static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
-        mInfo->mPropType = static_cast<CaptureTypes::Type>(propId);
-        enablePropMode(playerBase, isYukimaru);
-        // Standard capture sync assumes you can only switch
-        // capture types by first going uncaptured (which is 100% true for captures)
-        // For props, we can switch without going uncaptured first
-        // so we need to clear the flag that checks if the packet has been sent
-        // so a new updated packet will be sent
-        Client::resetIsSentCaptureInf();
+        setDecoyPropInfo();
+        // disablePropMode(playerBase, isYukimaru); // Hide current prop
+        // auto propId = static_cast<s32>(mInfo->mPropType) - static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
+        // propId = std::max(0, propId);
+        // propId++; // Go to next prop
+        // propId %= CaptureTypes::getTypesForCurrentWorld().size();
+        // propId += static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
+        // mInfo->mPropType = static_cast<CaptureTypes::Type>(propId);
+        // enablePropMode(playerBase, isYukimaru);
+        // // Standard capture sync assumes you can only switch
+        // // capture types by first going uncaptured (which is 100% true for captures)
+        // // For props, we can switch without going uncaptured first
+        // // so we need to clear the flag that checks if the packet has been sent
+        // // so a new updated packet will be sent
+        // Client::resetIsSentCaptureInf();
         mPropSwitchCooldownTime = 0;
     }
 

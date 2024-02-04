@@ -19,12 +19,24 @@ struct HideAndSeekInfo : GameModeInfoBase {
     CaptureTypes::Type mPropType = CaptureTypes::Type::Unknown;
 };
 
+struct DecoyPropInfo {
+    sead::Vector3f pos;
+    sead::Quatf rot;
+    sead::FixedSafeString<0x40> stageName;
+    u8 scenario;
+    CaptureTypes::Type propType;
+};
+
 class HideAndSeekMode : public GameModeBase {
     public:
         static const char* getCurrentPropName();
         static CaptureTypes::Type getCurrentPropType();
         static void clearCurrentPropAndBecomeSeeker();
         static void queueUpKillLocalPlayer();
+
+        void setDecoyPropInfo();
+        static std::optional<DecoyPropInfo> getDecoyPropInfo_static();
+        std::optional<DecoyPropInfo> getDecoyPropInfo();
 
         static std::optional<OrientedBoundingBox> getPropObb_static();
         std::optional<OrientedBoundingBox> getPropObb();
@@ -62,6 +74,7 @@ class HideAndSeekMode : public GameModeBase {
         HideAndSeekIcon *mModeLayout = nullptr;
         HideAndSeekInfo* mInfo = nullptr;
         al::CameraTicket *mTicket = nullptr;
+        std::optional<DecoyPropInfo> mDecoyPropInfo{};
 
         PropActor* getPropActor();
         bool isPropActive() { return mInfo->mPropType != CaptureTypes::Type::Unknown; }

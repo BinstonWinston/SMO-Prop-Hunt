@@ -482,6 +482,70 @@ void Client::sendPlayerInfPacket(const PlayerActorBase *playerBase, bool isYukim
 
 }
 
+void Client::sendDecoyPropUpdate(DecoyPropInfo const& decoyPropInfo) {
+    if (!sInstance) {
+        return;
+    }
+
+    {
+    sead::ScopedCurrentHeapSetter setter(sInstance->mHeap);
+
+    PlayerInf *packet = new PlayerInf();
+    packet->mUserID = sInstance->mUserID;
+    packet->mUserID.data[0] = 69; // Decoy prop fake user ID
+
+    packet->playerPos = decoyPropInfo.pos;
+    packet->playerRot = decoyPropInfo.rot;
+
+    for (size_t i = 0; i < 6; i++)
+    {
+        packet->animBlendWeights[i] = 0;
+    }
+
+    sInstance->isClientCaptured = true;
+    packet->actName = PlayerAnims::Type::Unknown;
+    packet->subActName = PlayerAnims::Type::Unknown;
+    
+    if(sInstance->lastPlayerInfPacket != *packet) {
+        sInstance->lastPlayerInfPacket = *packet; // deref packet and store in client memory
+        sInstance->mSocket->queuePacket(packet);
+    } else {
+        sInstance->mHeap->free(packet); // free packet if we're not using it
+    }
+    }
+
+    {
+    GameInf *packet = new GameInf();
+    packet->mUserID = sInstance->mUserID;
+    packet->mUserID.data[0] = 69;
+    packet->is2D = false;
+
+    packet->scenarioNo = decoyPropInfo.scenario;
+    strcpy(packet->stageName, decoyPropInfo.stageName.cstr());
+
+    if (*packet != sInstance->lastGameInfPacket && *packet != sInstance->emptyGameInfPacket) {
+        sInstance->lastGameInfPacket = *packet;
+        sInstance->mSocket->queuePacket(packet);
+    } else {
+        sInstance->mHeap->free(packet); // free packet if we're not using it
+    }
+    }
+
+    {
+        CaptureInf *packet = new CaptureInf();
+        packet->mUserID = sInstance->mUserID;
+        packet->mUserID.data[0] = 69;
+        packet->hackName[0] = CaptureTypes::ToValue(decoyPropInfo.propType);
+        if (packet->hackName[0] >= '\0') {
+            packet->hackName[0]++;
+        }
+        packet->hackName[1] = '\0';
+        sInstance->mSocket->queuePacket(packet);
+        sInstance->lastCaptureInfPacket = *packet;
+    }
+
+}
+
 /**
  * @brief sends info related to player's cap actor to server
  * 

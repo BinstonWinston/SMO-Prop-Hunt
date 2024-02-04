@@ -49,6 +49,8 @@
 
 #include "nn/account.h"
 
+#include "server/hns/HideAndSeekMode.hpp"
+
 #include "server/gamemode/GameModeBase.hpp"
 #include "server/gamemode/GameModeConfigMenu.hpp"
 #include "server/gamemode/GameModeInfoBase.hpp"
@@ -100,6 +102,7 @@ class Client {
 
         static void sendHackCapInfPacket(const HackCap *hackCap);
         static void sendPlayerInfPacket(const PlayerActorBase *player, bool isYukimaru);
+        static void sendDecoyPropUpdate(DecoyPropInfo const& decoyPropInfo);
         static void sendGameInfPacket(const PlayerActorHakoniwa *player, GameDataHolderAccessor holder);
         static void sendGameInfPacket(GameDataHolderAccessor holder);
         static void sendCostumeInfPacket(const char *body, const char *cap);
@@ -185,6 +188,9 @@ class Client {
         void resetCollectedShines();
 
         void removeShine(int shineId);
+
+        sead::FixedSafeString<0x40> const& getStageName() { return mStageName; }
+        u8 getScenarioNo() { return mScenario; }
 
         // public for debug purposes
         SocketClient *mSocket;
