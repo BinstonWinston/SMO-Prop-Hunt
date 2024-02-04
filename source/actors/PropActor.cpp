@@ -20,13 +20,15 @@
 bool PropActor::wasSensorHit = false;
 
 PropActor* PropActor::props[CaptureTypes::MAX_PROPS_PER_KINGDOM] = {nullptr};
+PropActor* PropActor::decoyProps[CaptureTypes::MAX_PROPS_PER_KINGDOM] = {nullptr};
 
 PropActor::PropActor(const char* name) : al::LiveActor(name) {
     kill();
 }
 
-void PropActor::initProp(const char* archiveName) {
+void PropActor::initProp(const char* archiveName, bool isDecoy) {
     mArchiveName = archiveName;
+    mIsDecoy = isDecoy;
 }
 
 void PropActor::init(al::ActorInitInfo const &initInfo) {
@@ -44,9 +46,11 @@ void PropActor::init(al::ActorInitInfo const &initInfo) {
         }
     }
 
-    if (al::isExistCollisionParts(this)) {
-        // Logger::log(("Disabling Collision.\n"));
-        al::invalidateCollisionParts(this);
+    if (!mIsDecoy) {
+        if (al::isExistCollisionParts(this)) {
+            // Logger::log(("Disabling Collision.\n"));
+            al::invalidateCollisionParts(this);
+        }
     }
 
     al::invalidateHitSensors(this);
@@ -116,7 +120,7 @@ void PropActor::syncPose() {
 }
 
 
-PropActor *PropActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName) {
+PropActor *PropActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName, bool isDecoy) {
     al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
     actorInitInfo.initViewIdSelf(&rootPlacementInfo, rootInitInfo);
 
@@ -130,7 +134,7 @@ PropActor *PropActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, a
 
     Logger::log("Creating Prop Actor: %s\n", propArchiveName);
 
-    newActor->initProp(propArchiveName);
+    newActor->initProp(propArchiveName, isDecoy);
     newActor->init(actorInitInfo);
 
     return reinterpret_cast<PropActor*>(newActor);
@@ -144,6 +148,7 @@ void PropActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementIn
     const auto range = CaptureTypes::getTypesForCurrentWorld();
     for (int32_t i = 0; i < range.size(); i++) {
         const char* propArchiveName = CaptureTypes::FindStr(range.getPropType(i));
-        PropActor::props[i] = PropActor::createFromFactory(rootInfo, placement, propArchiveName);
+        PropActor::props[i] = PropActor::createFromFactory(rootInfo, placement, propArchiveName, false);
+        PropActor::decoyProps[i] = PropActor::createFromFactory(rootInfo, placement, propArchiveName, true);
     }
 }

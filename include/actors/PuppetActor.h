@@ -95,7 +95,6 @@ class PuppetActor : public al::LiveActor {
 
         // Unknown means uncaptured
         CaptureTypes::Type mCaptureModelType = CaptureTypes::Type::Unknown;
-        CaptureTypes::Type mDecoyPropModelType = CaptureTypes::Type::Unknown;
 
         float mClosingSpeed = 0;
 };

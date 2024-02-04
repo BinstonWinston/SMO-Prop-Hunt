@@ -64,4 +64,5 @@ struct PuppetInfo {
 
     // Prop hunt
     std::optional<DecoyPropInfo> decoyPropInfo;
+    bool hasUpdatedDecoyProp = false;
 };

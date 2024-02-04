@@ -29,6 +29,7 @@ class HideAndSeekMode : public GameModeBase {
         void setDecoyPropInfo();
         static std::optional<DecoyPropInfo> getDecoyPropInfo_static();
         std::optional<DecoyPropInfo> getDecoyPropInfo();
+        PropActor* getDecoyPropActor();
 
         static std::optional<OrientedBoundingBox> getPropObb_static();
         std::optional<OrientedBoundingBox> getPropObb();

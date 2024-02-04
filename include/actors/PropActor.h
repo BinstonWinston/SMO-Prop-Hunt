@@ -41,7 +41,8 @@ class PropActor : public al::LiveActor {
         static bool wasSensorHit;
 
         static PropActor* props[CaptureTypes::MAX_PROPS_PER_KINGDOM];
-        static PropActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName);
+        static PropActor* decoyProps[CaptureTypes::MAX_PROPS_PER_KINGDOM];
+        static PropActor *createFromFactory(al::ActorInitInfo const &rootInitInfo, al::PlacementInfo const &rootPlacementInfo, const char* propArchiveName, bool isDecoy);
         static void initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement);
 
         PropActor(const char* name);
@@ -52,7 +53,7 @@ class PropActor : public al::LiveActor {
         virtual void makeActorAlive(void) override;
         virtual void makeActorDead(void) override;
 
-        void initProp(const char* archiveName);
+        void initProp(const char* archiveName, bool isDecoy);
 
         const char* getPropArchiveName() {
             return mArchiveName;
@@ -72,4 +73,5 @@ class PropActor : public al::LiveActor {
         
         PropInfo m_info{};
         const char* mArchiveName = nullptr;
+        bool mIsDecoy = false;
 };

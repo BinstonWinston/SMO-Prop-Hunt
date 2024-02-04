@@ -915,6 +915,7 @@ void Client::updateCaptureInfo(CaptureInf* packet) {
             .scenario = curInfo->scenarioNo,
             .propType = curInfo->curHack
         };
+        curInfo->hasUpdatedDecoyProp = false;
     }
     curInfo->curHack = CaptureTypes::ToType(value);
     curInfo->isCaptured = (curInfo->curHack != CaptureTypes::Type::Unknown);

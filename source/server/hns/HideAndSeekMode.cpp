@@ -130,6 +130,11 @@ void HideAndSeekMode::setDecoyPropInfo() {
         return;
     }
 
+    auto decoyPropActor = getDecoyPropActor();
+    if (decoyPropActor) {
+        al::hideModel(decoyPropActor);
+    }
+
     sead::Quatf rot{};
     al::calcQuat(&rot, propActor);
     mDecoyPropInfo = DecoyPropInfo{
@@ -139,6 +144,12 @@ void HideAndSeekMode::setDecoyPropInfo() {
         .scenario = Client::instance()->getScenarioNo(),
         .propType = getCurrentPropType()
     };
+
+    decoyPropActor = getDecoyPropActor();
+    if (decoyPropActor) {
+        decoyPropActor->makeActorAlive();
+        al::showModel(decoyPropActor);
+    }
 }
 
 std::optional<DecoyPropInfo> HideAndSeekMode::getDecoyPropInfo_static() {
@@ -393,6 +404,20 @@ PropActor* HideAndSeekMode::getPropActor() {
     return PropActor::props[static_cast<u32>(mInfo->mPropType) - static_cast<u32>(CaptureTypes::getTypesForCurrentWorld().start)];
 }
 
+PropActor* HideAndSeekMode::getDecoyPropActor() {
+    if (mInfo->mPropType == CaptureTypes::Type::Unknown) {
+        return nullptr;
+    }
+    if (!mDecoyPropInfo.has_value()) {
+        return nullptr;
+    }
+    if (static_cast<u32>(mDecoyPropInfo->propType) >= static_cast<u32>(CaptureTypes::getTypesForCurrentWorld().end)) {
+        // Invalid prop or prop from another kingdom
+        return nullptr;
+    }
+    return PropActor::decoyProps[static_cast<u32>(mDecoyPropInfo->propType) - static_cast<u32>(CaptureTypes::getTypesForCurrentWorld().start)];
+}
+
 void HideAndSeekMode::enablePropMode(PlayerActorBase* playerBase, bool isYukimaru) {
     sead::Random random(static_cast<u32>(sead::TickTime().toTicks()));
 
@@ -430,6 +455,11 @@ void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
         propActor->makeActorAlive();
     }
     propActor->setXform(p, r);
+
+    auto decoyPropActor = getDecoyPropActor();
+    if (decoyPropActor && mDecoyPropInfo.has_value()) {
+        decoyPropActor->setXform(mDecoyPropInfo->pos, mDecoyPropInfo->rot);
+    }
 
     // Set this every frame in case player goes in a capture or dies that would cause the player to re-appear
     player->mModelChanger->hideModel();
