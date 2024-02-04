@@ -63,17 +63,6 @@ void PuppetHackActor::control() {
 
 }
 
-al::ModelKeeper* overrideModelKeeper = nullptr;
-
-void hookInitActorModelKeeper(al::LiveActor* actor, al::ActorInitInfo const& initInfo, al::ActorResource* actorResource, int param_4) {
-    // if (!overrideModelKeeper || !actor) {
-        al::initActorModelKeeper(actor, initInfo, actorResource, param_4);
-    //     return;
-    // }
-
-    // actor->initModelKeeper(overrideModelKeeper);
-};
-
 PuppetHackActor *createPuppetHackActorFromFactory(al::ActorInitInfo const &rootInitInfo, const al::PlacementInfo *rootPlacementInfo, PuppetInfo *curInfo, const char *hackType) {
     al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
     actorInitInfo.initViewIdSelf(rootPlacementInfo, rootInitInfo);
@@ -114,17 +103,13 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
                 initInfo, &placement, curPuppet->getInfo(), hackName);
             if (dupliActor) {
                 curPuppet->addCapture(dupliActor, hackName);
-                if (!overrideModelKeeper) {
-                    overrideModelKeeper = dupliActor->mModelKeeper;
-                }
             }
 
-            PuppetHackActor* decoyActor = createPuppetHackActorFromFactory(
-                initInfo, &placement, curPuppet->getInfo(), hackName);
-            if (decoyActor) {
-                curPuppet->addDecoyProp(decoyActor, hackName);
-                if (!overrideModelKeeper) {
-                    overrideModelKeeper = decoyActor->mModelKeeper;
+            if (Client::getMaxPlayerCount() <= 4) { // Decoys only supported with 4 or fewer players
+                PuppetHackActor* decoyActor = createPuppetHackActorFromFactory(
+                    initInfo, &placement, curPuppet->getInfo(), hackName);
+                if (decoyActor) {
+                    curPuppet->addDecoyProp(decoyActor, hackName);
                 }
             }
         }
@@ -139,8 +124,6 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
             debugPuppet->addCapture(dupliActor, hackName);
         }
     }
-
-    overrideModelKeeper = nullptr;
 }
 
 void PuppetHackActor::initAllActors(al::ActorInitInfo const &initInfo, al::PlacementInfo const& placement) {

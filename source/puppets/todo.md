@@ -8,4 +8,4 @@ TODO
   <!-- * Local player's decoy prop doesn't reappear after death -->
   <!-- * Decoy prop stays in position, but changes type when the owner switches prop type. Only visible on other clients, not the local client -->
   * Also there's a bug that when you die you don't automatically become seeker, you stay a hider. Idk why
-  * Disable decoy props when maxPlayers > 4
+  <!-- * Disable decoy props when maxPlayers > 4 -->

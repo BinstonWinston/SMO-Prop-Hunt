@@ -314,7 +314,9 @@ void HideAndSeekMode::update() {
 
     mPropSwitchCooldownTime += Time::deltaTime;
 
-    if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown && !getPropCooldown().has_value()) {
+    if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown && !getPropCooldown().has_value() &&
+        Client::getMaxPlayerCount() <= 4) {
+        // Decoys are disabled when more than 4 players
         setDecoyPropInfo();
         // disablePropMode(playerBase, isYukimaru); // Hide current prop
         // auto propId = static_cast<s32>(mInfo->mPropType) - static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
