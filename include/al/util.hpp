@@ -52,6 +52,9 @@ al::LiveActor* createActorFunction(const char *name);
 
 namespace al
 {
+    void forceLodLevel(LiveActor*, int);
+
+
 // getters
 
     struct SceneMsgCtrl;

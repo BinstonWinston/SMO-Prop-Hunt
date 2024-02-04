@@ -100,6 +100,8 @@ namespace al
 
         void initSubActorKeeper(al::SubActorKeeper *);
 
+        void initModelKeeper(al::ModelKeeper*);
+
         const char *mActorName;                                // 0x48
         al::ActorPoseKeeperBase *mPoseKeeper;                  // 0x50
         al::ActorExecuteInfo *mLayoutExecuteInfo;              // 0x58

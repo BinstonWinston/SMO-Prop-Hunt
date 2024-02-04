@@ -129,11 +129,12 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
     gTextWriter->printf("Recv Queue Count: %d/%d\n", Client::instance()->mSocket->getRecvCount(), Client::instance()->mSocket->getRecvMaxCount());
 
     if(curScene && isInGame) {
+        PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
+
+        gTextWriter->printf("\nPlayer Anim: %s\n", ((PlayerActorHakoniwa*)playerBase)->mPlayerAnimator->mAnimFrameCtrl->getActionName());
 
         sead::LookAtCamera *cam = al::getLookAtCamera(curScene, 0);
         sead::Projection* projection = al::getProjectionSead(curScene, 0);
-
-        PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
 
         auto const propObbOpt = HideAndSeekMode::getPropObb_static();
 

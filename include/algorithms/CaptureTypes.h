@@ -43,7 +43,13 @@ namespace CaptureTypes {
         X(WorldEndType__SandWorld) \
         /* Forest */ \
         X(ForestWorldHomeRock000) \
+        X(ForestWorldHomeRiseParts001) \
+        X(ForestWorldHomeFallParts000) \
         X(ForestWorldHomeTree002) \
+        X(ShopObject) \
+        X(ForestWorldHomeEnergyStand) \
+        X(PackunPoison) \
+        X(TreasureBoxWood) \
         X(WorldEndType__ForestWorld) \
         /* Lake */ \
         X(LakeWorldHomeStonePillar002) \

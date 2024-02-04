@@ -55,6 +55,8 @@ void PropActor::init(al::ActorInitInfo const &initInfo) {
 
     al::invalidateOcclusionQuery(this);
 
+    al::forceLodLevel(this, 0);
+
     al::offCollide(this);
 
     makeActorDead();

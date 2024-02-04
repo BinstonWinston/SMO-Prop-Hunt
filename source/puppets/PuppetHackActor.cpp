@@ -16,7 +16,10 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
 
     al::initActorPoseTQSV(this);
 
-    // al::hideSilhouetteModelIfShow(this);
+    if (CaptureTypes::currentWorldId == 3) { // Wooded
+        // Needed for Poison Pirahna plant silhouette, causes crashes in some other kingdoms so not always calling this func
+        al::hideSilhouetteModelIfShow(this);
+    }
 
     if (CaptureTypes::currentWorldId != 1) { // This crashes on Cascade for some reason
         if(al::isExistDitherAnimator(this)) {
@@ -25,10 +28,10 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
         }
     }
 
-    if (al::isExistCollisionParts(this)) {
-        // Logger::log(("Disabling Collision.\n"));
-        al::invalidateCollisionParts(this);
-    }
+    // if (al::isExistCollisionParts(this)) {
+    //     // Logger::log(("Disabling Collision.\n"));
+    //     al::invalidateCollisionParts(this);
+    // }
 
     al::invalidateHitSensors(this);
 
@@ -36,7 +39,9 @@ void PuppetHackActor::init(al::ActorInitInfo const &initInfo) {
 
     al::invalidateOcclusionQuery(this);
 
-    al::offCollide(this);
+    al::forceLodLevel(this, 0);
+
+    // al::offCollide(this);
 
     makeActorDead();
 }
@@ -57,6 +62,17 @@ void PuppetHackActor::movement() {
 void PuppetHackActor::control() {
 
 }
+
+al::ModelKeeper* overrideModelKeeper = nullptr;
+
+void hookInitActorModelKeeper(al::LiveActor* actor, al::ActorInitInfo const& initInfo, al::ActorResource* actorResource, int param_4) {
+    if (!overrideModelKeeper || !actor) {
+        al::initActorModelKeeper(actor, initInfo, actorResource, param_4);
+        return;
+    }
+
+    actor->initModelKeeper(overrideModelKeeper);
+};
 
 PuppetHackActor *createPuppetHackActorFromFactory(al::ActorInitInfo const &rootInitInfo, const al::PlacementInfo *rootPlacementInfo, PuppetInfo *curInfo, const char *hackType) {
     al::ActorInitInfo actorInitInfo = al::ActorInitInfo();
@@ -98,6 +114,7 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
                 initInfo, &placement, curPuppet->getInfo(), hackName);
             if (dupliActor) {
                 curPuppet->addCapture(dupliActor, hackName);
+                overrideModelKeeper = dupliActor->mModelKeeper;
             }
         }
     }
@@ -111,6 +128,8 @@ void initAllActorsForPropType(al::ActorInitInfo const &initInfo, al::PlacementIn
             debugPuppet->addCapture(dupliActor, hackName);
         }
     }
+
+    overrideModelKeeper = nullptr;
 }
 
 void PuppetHackActor::initAllActors(al::ActorInitInfo const &initInfo, al::PlacementInfo const& placement) {

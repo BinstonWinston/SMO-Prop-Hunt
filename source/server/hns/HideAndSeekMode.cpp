@@ -156,7 +156,7 @@ bool HideAndSeekMode::isCollideWithSeeker(sead::Vector3f const& seekerPos) {
     if (!propObb.has_value()) {
         return false;
     }
-    return propObb.value().isInside(seekerPos, MARIO_RADIUS);
+    return propObb.value().isInside(seekerPos, MARIO_RADIUS*3.f /* increasing tag threshold distance to make it fair, since the ground pound takes some time */);
 }
 
 void HideAndSeekMode::update() {
@@ -187,7 +187,7 @@ void HideAndSeekMode::update() {
                         break;
                     }
 
-                    if(curInfo->isConnected && curInfo->isInSameStage && curInfo->isIt) { 
+                    if(curInfo->isConnected && curInfo->isInSameStage && curInfo->isIt && curInfo->curAnim == PlayerAnims::Type::HipDropLand) { 
 
                         float pupDist = al::calcDistance(playerBase, curInfo->playerPos); // TODO: remove distance calculations and use hit sensors to determine this
 
