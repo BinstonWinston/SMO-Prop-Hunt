@@ -738,11 +738,12 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         if (packet->hackName[0] >= '\0') {
             packet->hackName[0]++;
         }
-        packet->hackName[1] = HideAndSeekMode::getDecoyPropInfo_static().has_value();
+        packet->hackName[1] = HideAndSeekMode::getDecoyPropInfo_static().has_value() && !sInstance->hasSentDecoyPropCaptureInf;
         packet->hackName[2] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = true;
+        sInstance->hasSentDecoyPropCaptureInf = true;
     } else if (!sInstance->isClientCaptured && sInstance->isSentCaptureInf) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
@@ -906,7 +907,7 @@ void Client::updateCaptureInfo(CaptureInf* packet) {
         value--;
     }
     bool const droppedDecoy = packet->hackName[1];
-    if (droppedDecoy && (!curInfo->decoyPropInfo.has_value() || curInfo->decoyPropInfo->propType != curInfo->curHack)) {
+    if (droppedDecoy) {
         curInfo->decoyPropInfo = DecoyPropInfo{
             .pos = curInfo->playerPos,
             .rot = curInfo->playerRot,

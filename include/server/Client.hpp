@@ -195,6 +195,8 @@ class Client {
         // public for debug purposes
         SocketClient *mSocket;
 
+        bool hasSentDecoyPropCaptureInf = false;
+
     private:
         void updatePlayerInfo(PlayerInf *packet);
         void updateHackCapInfo(HackCapInf *packet);
