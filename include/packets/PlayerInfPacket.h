@@ -12,6 +12,10 @@ struct PACKED PlayerInf : Packet {
     PlayerAnims::Type actName;
     PlayerAnims::Type subActName;
 
+    bool isDecoy() {
+        return actName == PlayerAnims::Type::End;
+    }
+
     bool operator==(const PlayerInf &rhs) const {
         bool isWeightsEqual = true;
         for (size_t i = 0; i < 6; i++)

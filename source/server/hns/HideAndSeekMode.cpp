@@ -316,8 +316,6 @@ void HideAndSeekMode::update() {
 
     if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown && !getPropCooldown().has_value()) {
         setDecoyPropInfo();
-        Client::resetIsSentCaptureInf();
-        Client::instance()->hasSentDecoyPropCaptureInf = false;
         // disablePropMode(playerBase, isYukimaru); // Hide current prop
         // auto propId = static_cast<s32>(mInfo->mPropType) - static_cast<s32>(CaptureTypes::getTypesForCurrentWorld().start);
         // propId = std::max(0, propId);
@@ -458,6 +456,8 @@ void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
 
     auto decoyPropActor = getDecoyPropActor();
     if (decoyPropActor && mDecoyPropInfo.has_value()) {
+        decoyPropActor->makeActorAlive();
+        al::showModel(decoyPropActor);
         decoyPropActor->setXform(mDecoyPropInfo->pos, mDecoyPropInfo->rot);
     }
 

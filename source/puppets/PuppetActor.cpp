@@ -162,11 +162,13 @@ void PuppetActor::control() {
         // Capture Updating
 
         if (mInfo->decoyPropInfo.has_value() && !mInfo->hasUpdatedDecoyProp) {
-            if (mDecoyProps->getCurrentActor()) {
-                mDecoyProps->getCurrentActor()->makeActorDead();  // sets previous model to dead so we can try to
-            }
+            auto oldDecoyActor = mDecoyProps->getCurrentActor();
             // switch to capture model
-            setDecoyProp(CaptureTypes::FindStr(mInfo->curHack));
+            setDecoyProp(CaptureTypes::FindStr(mInfo->decoyPropInfo->propType));
+            if (oldDecoyActor && mDecoyProps->getCurrentActor() != oldDecoyActor) {
+                oldDecoyActor->makeActorDead();  // sets previous model to dead so we can try to
+            }
+
             if (mDecoyProps->getCurrentActor()) {
                 mDecoyProps->getCurrentActor()->makeActorAlive();  // make new model alive
                 *al::getTransPtr(mDecoyProps->getCurrentActor()) = mInfo->decoyPropInfo->pos;

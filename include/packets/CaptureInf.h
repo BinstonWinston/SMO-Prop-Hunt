@@ -8,6 +8,10 @@ struct PACKED CaptureInf : Packet {
         mPacketSize = sizeof(CaptureInf) - sizeof(Packet);
     };
 
+    bool isDecoyProp() {
+        return hackName[1] != false;
+    }
+
     char hackName[0x20] = {};
 
 };

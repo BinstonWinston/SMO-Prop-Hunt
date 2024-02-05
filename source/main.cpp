@@ -56,6 +56,11 @@ void updatePlayerInfo(GameDataHolderAccessor holder, PlayerActorBase* playerBase
 
     if (gameInfSendTimer >= 60) {
 
+        auto decoyPropInfo = HideAndSeekMode::getDecoyPropInfo_static();
+        if (decoyPropInfo.has_value()) {
+            Client::sendDecoyPropUpdate(*decoyPropInfo);
+        }
+
         if (isYukimaru) {
             Client::sendGameInfPacket(holder);
         } else {
@@ -132,6 +137,17 @@ void drawMainHook(HakoniwaSequence *curSequence, sead::Viewport *viewport, sead:
         PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
 
         gTextWriter->printf("\nPlayer Anim: %s\n", ((PlayerActorHakoniwa*)playerBase)->mPlayerAnimator->mAnimFrameCtrl->getActionName());
+       
+        PuppetInfo* curInfo = Client::getLatestInfo();
+        if (curInfo) {
+            gTextWriter->printf("Decoy Prop Type: ");
+            if (!curInfo->decoyPropInfo.has_value()) {
+                gTextWriter->printf("{}\n");
+            }
+            else {
+                gTextWriter->printf("%s\n", CaptureTypes::FindStr(curInfo->decoyPropInfo->propType));
+            }
+        }
 
         sead::LookAtCamera *cam = al::getLookAtCamera(curScene, 0);
         sead::Projection* projection = al::getProjectionSead(curScene, 0);

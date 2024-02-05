@@ -487,59 +487,56 @@ void Client::sendDecoyPropUpdate(DecoyPropInfo const& decoyPropInfo) {
         return;
     }
 
-    {
     sead::ScopedCurrentHeapSetter setter(sInstance->mHeap);
 
-    PlayerInf *packet = new PlayerInf();
-    packet->mUserID = sInstance->mUserID;
-    packet->mUserID.data[0] = 69; // Decoy prop fake user ID
-
-    packet->playerPos = decoyPropInfo.pos;
-    packet->playerRot = decoyPropInfo.rot;
-
-    for (size_t i = 0; i < 6; i++)
     {
-        packet->animBlendWeights[i] = 0;
-    }
+        GameInf *packet = new GameInf();
+        packet->mUserID = sInstance->mUserID;
+        packet->is2D_ = (1 << 4) | 0; // isDecoy=true, is2D=false
 
-    sInstance->isClientCaptured = true;
-    packet->actName = PlayerAnims::Type::Unknown;
-    packet->subActName = PlayerAnims::Type::Unknown;
-    
-    if(sInstance->lastPlayerInfPacket != *packet) {
-        sInstance->lastPlayerInfPacket = *packet; // deref packet and store in client memory
-        sInstance->mSocket->queuePacket(packet);
-    } else {
-        sInstance->mHeap->free(packet); // free packet if we're not using it
-    }
+        packet->scenarioNo = decoyPropInfo.scenario;
+        strcpy(packet->stageName, decoyPropInfo.stageName.cstr());
+
+        if (*packet != sInstance->lastGameInfPacket && *packet != sInstance->emptyGameInfPacket) {
+            sInstance->lastGameInfPacket = *packet;
+            sInstance->mSocket->queuePacket(packet);
+        } else {
+            sInstance->mHeap->free(packet); // free packet if we're not using it
+        }
     }
 
     {
-    GameInf *packet = new GameInf();
-    packet->mUserID = sInstance->mUserID;
-    packet->mUserID.data[0] = 69;
-    packet->is2D = false;
+        PlayerInf *packet = new PlayerInf();
+        packet->mUserID = sInstance->mUserID;
 
-    packet->scenarioNo = decoyPropInfo.scenario;
-    strcpy(packet->stageName, decoyPropInfo.stageName.cstr());
+        packet->playerPos = decoyPropInfo.pos;
+        packet->playerRot = decoyPropInfo.rot;
 
-    if (*packet != sInstance->lastGameInfPacket && *packet != sInstance->emptyGameInfPacket) {
-        sInstance->lastGameInfPacket = *packet;
-        sInstance->mSocket->queuePacket(packet);
-    } else {
-        sInstance->mHeap->free(packet); // free packet if we're not using it
-    }
+        for (size_t i = 0; i < 6; i++)
+        {
+            packet->animBlendWeights[i] = 0;
+        }
+
+        packet->actName = PlayerAnims::Type::End; // End implies isDecoy=true
+        packet->subActName = PlayerAnims::Type::Unknown; // End implies isDecoy=true
+        
+        if(sInstance->lastPlayerInfPacket != *packet) {
+            sInstance->lastPlayerInfPacket = *packet; // deref packet and store in client memory
+            sInstance->mSocket->queuePacket(packet);
+        } else {
+            sInstance->mHeap->free(packet); // free packet if we're not using it
+        }
     }
 
     {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
-        packet->mUserID.data[0] = 69;
         packet->hackName[0] = CaptureTypes::ToValue(decoyPropInfo.propType);
         if (packet->hackName[0] >= '\0') {
             packet->hackName[0]++;
         }
-        packet->hackName[1] = '\0';
+        packet->hackName[1] = true; // isDecoyProp
+        packet->hackName[2] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
     }
@@ -611,9 +608,9 @@ void Client::sendGameInfPacket(const PlayerActorHakoniwa* player, GameDataHolder
     packet->mUserID = sInstance->mUserID;
 
     if (player) {
-        packet->is2D = player->mDimKeeper->is2DModel;
+        packet->is2D_ = player->mDimKeeper->is2DModel;
     } else {
-        packet->is2D = false;
+        packet->is2D_ = false;
     }
 
     packet->scenarioNo = holder.mData->mGameDataFile->getScenarioNo();
@@ -645,7 +642,7 @@ void Client::sendGameInfPacket(GameDataHolderAccessor holder) {
     GameInf *packet = new GameInf();
     packet->mUserID = sInstance->mUserID;
 
-    packet->is2D = false;
+    packet->is2D_ = false;
 
     packet->scenarioNo = holder.mData->mGameDataFile->getScenarioNo();
 
@@ -738,12 +735,11 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         if (packet->hackName[0] >= '\0') {
             packet->hackName[0]++;
         }
-        packet->hackName[1] = HideAndSeekMode::getDecoyPropInfo_static().has_value() && !sInstance->hasSentDecoyPropCaptureInf;
+        packet->hackName[1] = false; // isDecoyProp
         packet->hackName[2] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
         sInstance->isSentCaptureInf = true;
-        sInstance->hasSentDecoyPropCaptureInf = true;
     } else if (!sInstance->isClientCaptured && sInstance->isSentCaptureInf) {
         CaptureInf *packet = new CaptureInf();
         packet->mUserID = sInstance->mUserID;
@@ -751,7 +747,7 @@ void Client::sendCaptureInfPacket(const PlayerActorHakoniwa* player) {
         if (packet->hackName[0] >= '\0') {
             packet->hackName[0]++;
         }
-        packet->hackName[1] = false;
+        packet->hackName[1] = false; // isDecoyProp
         packet->hackName[2] = '\0';
         sInstance->mSocket->queuePacket(packet);
         sInstance->lastCaptureInfPacket = *packet;
@@ -824,6 +820,22 @@ void Client::updatePlayerInfo(PlayerInf *packet) {
 
     if(!curInfo->isConnected) {
         curInfo->isConnected = true;
+    }
+
+    if (packet->isDecoy()) {
+        if (!curInfo->decoyPropInfo.has_value()) {
+            return;
+        }
+        curInfo->decoyPropInfo->pos = packet->playerPos;
+        // check if rotation is larger than zero and less than or equal to 1
+        if(abs(packet->playerRot.x) > 0.f || abs(packet->playerRot.y) > 0.f || abs(packet->playerRot.z) > 0.f || abs(packet->playerRot.w) > 0.f) {
+            if(abs(packet->playerRot.x) <= 1.f || abs(packet->playerRot.y) <= 1.f || abs(packet->playerRot.z) <= 1.f || abs(packet->playerRot.w) <= 1.f) {
+                curInfo->decoyPropInfo->rot = packet->playerRot;
+            }
+        }
+        curInfo->hasUpdatedDecoyProp = false;
+        
+        return;
     }
 
     curInfo->playerPos = packet->playerPos;
@@ -906,19 +918,17 @@ void Client::updateCaptureInfo(CaptureInf* packet) {
     if (value > '\0') {
         value--;
     }
-    bool const droppedDecoy = packet->hackName[1];
-    if (droppedDecoy) {
-        curInfo->decoyPropInfo = DecoyPropInfo{
-            .pos = curInfo->playerPos,
-            .rot = curInfo->playerRot,
-            .stageName = sead::FixedSafeString<0x40>(curInfo->stageName),
-            .scenario = curInfo->scenarioNo,
-            .propType = curInfo->curHack
-        };
+    if (packet->isDecoyProp()) {
+        if (!curInfo->decoyPropInfo.has_value()) {
+            return;
+        }
+        curInfo->decoyPropInfo->propType = CaptureTypes::ToType(value);
         curInfo->hasUpdatedDecoyProp = false;
     }
-    curInfo->curHack = CaptureTypes::ToType(value);
-    curInfo->isCaptured = (curInfo->curHack != CaptureTypes::Type::Unknown);
+    else {
+        curInfo->curHack = CaptureTypes::ToType(value);
+        curInfo->isCaptured = (curInfo->curHack != CaptureTypes::Type::Unknown);
+    }
 }
 
 /**
@@ -996,13 +1006,30 @@ void Client::updateGameInfo(GameInf *packet) {
 
     if(curInfo->isConnected) {
 
-        curInfo->scenarioNo = packet->scenarioNo;
+        if (packet->isDecoyProp()) {
+            // if ((curInfo->scenarioNo < 15 || curInfo->scenarioNo == packet->scenarioNo) &&
+            //      al::isEqualString(packet->stageName, curInfo->stageName)) {
+            //     // curInfo->decoyPropInfo = {}; // Not in same stage, so don't display decoy
+            //     // curInfo->hasUpdatedDecoyProp = false;
+            //     return;
+            // }
 
-        if(strcmp(packet->stageName, "") != 0 && strlen(packet->stageName) > 3) {
-            strcpy(curInfo->stageName, packet->stageName);
+            if (!curInfo->decoyPropInfo.has_value()) {
+                curInfo->decoyPropInfo = DecoyPropInfo{};
+            }
+            curInfo->decoyPropInfo->scenario = packet->scenarioNo;
+            curInfo->decoyPropInfo->stageName = sead::FixedSafeString<0x40>(packet->stageName);
+            curInfo->hasUpdatedDecoyProp = false;
         }
+        else {
+            curInfo->scenarioNo = packet->scenarioNo;
 
-        curInfo->is2D = packet->is2D;
+            if(strcmp(packet->stageName, "") != 0 && strlen(packet->stageName) > 3) {
+                strcpy(curInfo->stageName, packet->stageName);
+            }
+
+            curInfo->is2D = packet->is2D();
+        }
     }
 }
 
