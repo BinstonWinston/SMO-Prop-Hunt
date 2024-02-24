@@ -28,6 +28,8 @@
 
 static constexpr f32 PROP_SWITCH_COOLDOWN_TIME_THRESHOLD_SECONDS = 5;
 constexpr f32 MARIO_RADIUS = 100.f;
+constexpr f32 TIME_UNTIL_CONSIDERED_NOT_MOVING_THRESHOLD_SECONDS = 3;
+constexpr f32 DIST_THRESHOLD_PER_FRAME_TO_BE_CONSIDERED_MOVING = 10;
 
 HideAndSeekMode::HideAndSeekMode(const char* name) : GameModeBase(name) {}
 
@@ -81,6 +83,7 @@ void HideAndSeekMode::begin() {
 
     mInvulnTime = 0;
     mPropSwitchCooldownTime = 0;
+    mTimeSinceLastMoved = 0;
 
     if(coinCounter->mIsAlive)
         coinCounter->tryEnd();
@@ -109,6 +112,7 @@ void HideAndSeekMode::end() {
 
     mInvulnTime = 0.0f;
     mPropSwitchCooldownTime = 0;
+    mTimeSinceLastMoved = 0;
 
     if(!coinCounter->mIsAlive)
         coinCounter->tryStart();
@@ -202,7 +206,11 @@ bool HideAndSeekMode::isCollideWithSeeker(sead::Vector3f const& seekerPos) {
     if (!propObb.has_value()) {
         return false;
     }
-    return propObb.value().isInside(seekerPos, MARIO_RADIUS*3.f /* increasing tag threshold distance to make it fair, since the ground pound takes some time */);
+    f32 s = 1.f;
+    if (!isMoving()) {
+        s = 3.f; /* increasing tag threshold distance to make it fair, since the ground pound takes some time */
+    }
+    return propObb.value().isInside(seekerPos, MARIO_RADIUS*s);
 }
 
 void HideAndSeekMode::update() {
@@ -224,6 +232,16 @@ void HideAndSeekMode::update() {
         if (mInvulnTime >= 5) {  
 
             if (playerBase) {
+
+                if (!isYukimaru && (PlayerFunction::isPlayerDeadStatus(playerBase))) {
+                    // Local player died without being tagged, e.g. fell off map
+                    mInfo->mIsPlayerIt = true;
+                    mModeTimer->disableTimer();
+                    mModeLayout->showSeeking();
+
+                    Client::sendTagInfPacket();
+                }
+
                 for (size_t i = 0; i < mPuppetHolder->getSize(); i++)
                 {
                     PuppetInfo *curInfo = Client::getPuppetInfo(i);
@@ -233,7 +251,8 @@ void HideAndSeekMode::update() {
                         break;
                     }
 
-                    if(curInfo->isConnected && curInfo->isInSameStage && curInfo->isIt && curInfo->curAnim == PlayerAnims::Type::HipDropLand) { 
+                    bool const isTaggable = (isMoving() || curInfo->curAnim == PlayerAnims::Type::HipDropLand); // If a hider has stopped moving, you need to ground-pound near them to tag them. If they're running they can be tagged normally
+                    if(curInfo->isConnected && curInfo->isInSameStage && curInfo->isIt && isTaggable) { 
 
                         float pupDist = al::calcDistance(playerBase, curInfo->playerPos); // TODO: remove distance calculations and use hit sensors to determine this
 
@@ -242,14 +261,6 @@ void HideAndSeekMode::update() {
                                 killLocalPlayer((PlayerActorHakoniwa*)playerBase);
                             } else if(pupDist < MARIO_RADIUS*2.f && ((PlayerActorHakoniwa*)playerBase)->mDimKeeper->is2DModel == curInfo->is2D) {
                                 killLocalPlayer((PlayerActorHakoniwa*)playerBase);
-                            } else if (PlayerFunction::isPlayerDeadStatus(playerBase)) {
-
-                                mInfo->mIsPlayerIt = true;
-                                mModeTimer->disableTimer();
-                                mModeLayout->showSeeking();
-
-                                Client::sendTagInfPacket();
-                                
                             }
                         }
                     }
@@ -313,6 +324,7 @@ void HideAndSeekMode::update() {
     }
 
     mPropSwitchCooldownTime += Time::deltaTime;
+    mTimeSinceLastMoved += Time::deltaTime;
 
     if (al::isPadHoldR(-1) && al::isPadTriggerPressLeftStick(-1) && !mInfo->mIsPlayerIt && mInfo->mPropType != CaptureTypes::Type::Unknown && !getPropCooldown().has_value() &&
         Client::getMaxPlayerCount() <= 4) {
@@ -449,6 +461,10 @@ void HideAndSeekMode::updatePropPosition(PlayerActorHakoniwa* player) {
         return;
     }
 
+    if (al::calcDistance(player, propActor) > DIST_THRESHOLD_PER_FRAME_TO_BE_CONSIDERED_MOVING) {
+        mTimeSinceLastMoved = 0;
+    }
+
     auto const& p = al::getTrans(player);
     auto const& r = al::getQuat(player);
     if (al::isDead(propActor)) {
@@ -501,4 +517,8 @@ void HideAndSeekMode::queueUpKillLocalPlayer() {
         return;
     }
     hsMode->mLocalPlayerKillQueued = true;
+}
+
+bool HideAndSeekMode::isMoving() {
+    return mTimeSinceLastMoved < TIME_UNTIL_CONSIDERED_NOT_MOVING_THRESHOLD_SECONDS;
 }

@@ -63,6 +63,7 @@ class HideAndSeekMode : public GameModeBase {
         bool mLocalPlayerKillQueued = false;
         float mInvulnTime = 0.0f;
         f32 mPropSwitchCooldownTime = 0.0f;
+        f32 mTimeSinceLastMoved = 0.0f;
         GameModeTimer* mModeTimer = nullptr;
         HideAndSeekIcon *mModeLayout = nullptr;
         HideAndSeekInfo* mInfo = nullptr;
@@ -74,5 +75,7 @@ class HideAndSeekMode : public GameModeBase {
         void enablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
         void disablePropMode(PlayerActorBase* playerBase, bool isYukimaru);
         void updatePropPosition(PlayerActorHakoniwa* player);
+
+        bool isMoving();
 
 };

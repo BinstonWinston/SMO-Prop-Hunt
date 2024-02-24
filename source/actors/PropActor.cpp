@@ -141,8 +141,10 @@ PropActor *PropActor::createFromFactory(al::ActorInitInfo const &rootInitInfo, a
 }
 
 void PropActor::initAllActors(al::ActorInitInfo const &rootInfo, al::PlacementInfo const &placement) {
+    static_assert(sizeof(PropActor::props) == sizeof(PropActor::decoyProps), "This code assumes PropActor::props and PropActor::decoyProps have the same length.");
     for (int32_t i = 0; i < sizeof(PropActor::props) / sizeof(PropActor::props[0]); i++) {
         PropActor::props[i] = nullptr;
+        PropActor::decoyProps[i] = nullptr;
     }
 
     const auto range = CaptureTypes::getTypesForCurrentWorld();
